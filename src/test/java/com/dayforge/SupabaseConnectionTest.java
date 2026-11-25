@@ -45,6 +45,43 @@ public class SupabaseConnectionTest {
     }
 
     @Test
+    @DisplayName("PostgreSQL Driver: org.postgresql.Driver is available on classpath")
+    void testPostgresDriverAvailable() {
+        assertDoesNotThrow(() -> Class.forName("org.postgresql.Driver"),
+                "PostgreSQL JDBC driver must be present on the classpath");
+    }
+
+    @Test
+    @DisplayName("Supabase URL Normalization: Handles embedded password containing '@' and extracts credentials")
+    void testUrlNormalizationWithAtInPassword() {
+        String rawSupabaseUri = "postgresql://postgres.ibhketgjfhiavoyfruzb:p@ss@word@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres";
+        String normalized = DatabaseConfig.normalizeJdbcUrl(rawSupabaseUri);
+        DatabaseConfig.ParsedCredentials creds = DatabaseConfig.extractCredentialsIfEmbedded(rawSupabaseUri, "", "");
+
+        assertEquals("jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require", normalized);
+        assertEquals("postgres.ibhketgjfhiavoyfruzb", creds.username);
+        assertEquals("p@ss@word", creds.password);
+    }
+
+    @Test
+    @DisplayName("PostgreSQL Validation: Fails fast on missing or invalid pooler credentials")
+    void testPostgresValidationFailsFast() {
+        String poolerUrl = "jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require";
+
+        assertThrows(IllegalStateException.class, () ->
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("", "secret")));
+
+        assertThrows(IllegalStateException.class, () ->
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.ibhketgjfhiavoyfruzb", "")));
+
+        assertThrows(IllegalStateException.class, () ->
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres", "secret")));
+
+        assertDoesNotThrow(() ->
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.ibhketgjfhiavoyfruzb", "secret")));
+    }
+
+    @Test
     @DisplayName("Live Supabase Connectivity Probe: Executed when environment variables are supplied")
     void testLiveSupabaseConnectivityIfConfigured() {
         String dbUrl = System.getenv("SUPABASE_DB_URL");

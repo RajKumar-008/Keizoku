@@ -18,15 +18,9 @@ services:
         value: 10000
       - key: SPRING_PROFILES_ACTIVE
         value: prod
-      - key: DB_HOST
-        value: aws-1-ap-northeast-1.pooler.supabase.com
-      - key: DB_PORT
-        value: "5432"
-      - key: DB_NAME
-        value: postgres
-      - key: DB_USERNAME
+      - key: SUPABASE_DB_URL
+        value: jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require
+      - key: SUPABASE_DB_USERNAME
         sync: false
-      - key: DB_PASSWORD
+      - key: SUPABASE_DB_PASSWORD
         sync: false
-      - key: DB_PATH
-        value: /var/data/keizoku

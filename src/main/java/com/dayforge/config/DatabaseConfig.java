@@ -66,6 +66,10 @@ public class DatabaseConfig {
         // Check if credentials are embedded in URL (e.g. postgresql://user:pass@host:port/db)
         ParsedCredentials creds = extractCredentialsIfEmbedded(rawUrl, username, password);
 
+        if (jdbcUrl != null && jdbcUrl.startsWith("jdbc:postgresql:")) {
+            validatePostgresConfiguration(jdbcUrl, creds);
+        }
+
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(creds.username);
@@ -172,9 +176,13 @@ public class DatabaseConfig {
         }
 
         // If credentials are in URL (jdbc:postgresql://user:pass@host), remove credentials from JDBC url
-        if (normalized.startsWith("jdbc:postgresql://") && normalized.contains("@")) {
-            int atIndex = normalized.indexOf('@');
-            normalized = "jdbc:postgresql://" + normalized.substring(atIndex + 1);
+        if (normalized.startsWith("jdbc:postgresql://")) {
+            int authorityStart = "jdbc:postgresql://".length();
+            int pathOrQueryStart = findAuthorityEnd(normalized, authorityStart);
+            int atIndex = normalized.lastIndexOf('@', pathOrQueryStart - 1);
+            if (atIndex >= authorityStart) {
+                normalized = "jdbc:postgresql://" + normalized.substring(atIndex + 1);
+            }
         }
 
         // Enforce sslmode=require for PostgreSQL endpoints if not already specified
@@ -185,13 +193,61 @@ public class DatabaseConfig {
         return normalized;
     }
 
+    private static int findAuthorityEnd(String url, int start) {
+        int slashIdx = url.indexOf('/', start);
+        int queryIdx = url.indexOf('?', start);
+        if (slashIdx < 0) return (queryIdx < 0) ? url.length() : queryIdx;
+        if (queryIdx < 0) return slashIdx;
+        return Math.min(slashIdx, queryIdx);
+    }
+
+    /**
+     * Fails fast when PostgreSQL is configured without valid credentials so the app
+     * never sends an empty username to Supabase (which triggers EINVALIDUSERINFO)
+     * and never silently falls back to H2.
+     */
+    public static void validatePostgresConfiguration(String jdbcUrl, ParsedCredentials creds) {
+        if (creds.username == null || creds.username.isBlank()) {
+            throw new IllegalStateException(
+                    "PostgreSQL username is missing. Set SUPABASE_DB_USERNAME (e.g. postgres.<project_ref> for Supabase Session Pooler).");
+        }
+        if (creds.password == null || creds.password.isBlank()) {
+            throw new IllegalStateException(
+                    "PostgreSQL password is missing. Set SUPABASE_DB_PASSWORD.");
+        }
+        if (jdbcUrl.contains("pooler.supabase.com") && !creds.username.contains(".")) {
+            throw new IllegalStateException(
+                    "Invalid Supabase Session Pooler username format: expected '<user>.<project_ref>' (e.g. 'postgres.ibhketgjfhiavoyfruzb').");
+        }
+    }
+
     /**
      * Extracts embedded username and password if user provided standard URI with credentials
      */
-    private ParsedCredentials extractCredentialsIfEmbedded(String url, String fallbackUser, String fallbackPass) {
+    public static ParsedCredentials extractCredentialsIfEmbedded(String url, String fallbackUser, String fallbackPass) {
         if (url != null && (url.startsWith("postgres://") || url.startsWith("postgresql://") || url.startsWith("jdbc:postgresql://"))) {
+            String cleanUrl = url.trim();
+            if (cleanUrl.startsWith("jdbc:")) {
+                cleanUrl = cleanUrl.substring(5);
+            }
+            int schemeEnd = cleanUrl.indexOf("://");
+            if (schemeEnd >= 0) {
+                int authorityStart = schemeEnd + 3;
+                int authorityEnd = findAuthorityEnd(cleanUrl, authorityStart);
+                int atIndex = cleanUrl.lastIndexOf('@', authorityEnd - 1);
+                if (atIndex > authorityStart) {
+                    String userInfo = cleanUrl.substring(authorityStart, atIndex);
+                    int colonIdx = userInfo.indexOf(':');
+                    if (colonIdx >= 0) {
+                        String rawUser = userInfo.substring(0, colonIdx);
+                        String rawPass = userInfo.substring(colonIdx + 1);
+                        String user = !rawUser.isBlank() ? rawUser : fallbackUser;
+                        String pass = !rawPass.isEmpty() ? rawPass : fallbackPass;
+                        return new ParsedCredentials(user, pass);
+                    }
+                }
+            }
             try {
-                String cleanUrl = url.startsWith("jdbc:") ? url.substring(5) : url;
                 URI uri = URI.create(cleanUrl);
                 String userInfo = uri.getUserInfo();
                 if (userInfo != null && userInfo.contains(":")) {
@@ -216,11 +272,11 @@ public class DatabaseConfig {
         return url.replaceAll("://.*?:.*?@", "://***:***@");
     }
 
-    private static class ParsedCredentials {
-        final String username;
-        final String password;
+    public static class ParsedCredentials {
+        public final String username;
+        public final String password;
 
-        ParsedCredentials(String username, String password) {
+        public ParsedCredentials(String username, String password) {
             this.username = username;
             this.password = password;
         }
