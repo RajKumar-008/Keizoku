@@ -1,0 +1,35 @@
+# Git & Version Control
+.git/
+.gitignore
+
+# Maven & Gradle build artifacts
+target/
+build/
+bin/
+out/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.project
+.classpath
+.factorypath
+.apt_generated
+
+# Local data & databases (keep seed database template, ignore transient H2 files)
+data/*
+!data/dayforgedb.mv.db
+
+# Environment files & Secrets
+.env
+*.env
+
+# Temporary files & Logs
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: keizoku
+    env: docker
+    rootDir: .
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /api/ping
+    disk:
+      name: keizoku-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: JAVA_VERSION
+        value: "17"
+      - key: PORT
+        value: 10000
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_HOST
+        value: aws-1-ap-northeast-1.pooler.supabase.com
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_PATH
+        value: /var/data/keizoku
