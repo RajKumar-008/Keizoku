@@ -217,7 +217,7 @@ public class DatabaseConfig {
         }
         if (jdbcUrl.contains("pooler.supabase.com") && !creds.username.contains(".")) {
             throw new IllegalStateException(
-                    "Invalid Supabase Session Pooler username format: expected '<user>.<project_ref>' (e.g. 'postgres.ibhketgjfhiavoyfruzb').");
+                    "Invalid Supabase Session Pooler username format: expected '<user>.<project_ref>' (e.g. 'postgres.njdpstizttwhrbuikjup').");
         }
     }
 

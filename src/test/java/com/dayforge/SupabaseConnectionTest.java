@@ -54,31 +54,31 @@ public class SupabaseConnectionTest {
     @Test
     @DisplayName("Supabase URL Normalization: Handles embedded password containing '@' and extracts credentials")
     void testUrlNormalizationWithAtInPassword() {
-        String rawSupabaseUri = "postgresql://postgres.ibhketgjfhiavoyfruzb:p@ss@word@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres";
+        String rawSupabaseUri = "postgresql://postgres.njdpstizttwhrbuikjup:p@ss@word@aws-0-ap-south-1.pooler.supabase.com:5432/postgres";
         String normalized = DatabaseConfig.normalizeJdbcUrl(rawSupabaseUri);
         DatabaseConfig.ParsedCredentials creds = DatabaseConfig.extractCredentialsIfEmbedded(rawSupabaseUri, "", "");
 
-        assertEquals("jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require", normalized);
-        assertEquals("postgres.ibhketgjfhiavoyfruzb", creds.username);
+        assertEquals("jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require", normalized);
+        assertEquals("postgres.njdpstizttwhrbuikjup", creds.username);
         assertEquals("p@ss@word", creds.password);
     }
 
     @Test
     @DisplayName("PostgreSQL Validation: Fails fast on missing or invalid pooler credentials")
     void testPostgresValidationFailsFast() {
-        String poolerUrl = "jdbc:postgresql://aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require";
+        String poolerUrl = "jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require";
 
         assertThrows(IllegalStateException.class, () ->
                 DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("", "secret")));
 
         assertThrows(IllegalStateException.class, () ->
-                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.ibhketgjfhiavoyfruzb", "")));
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.njdpstizttwhrbuikjup", "")));
 
         assertThrows(IllegalStateException.class, () ->
                 DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres", "secret")));
 
         assertDoesNotThrow(() ->
-                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.ibhketgjfhiavoyfruzb", "secret")));
+                DatabaseConfig.validatePostgresConfiguration(poolerUrl, new DatabaseConfig.ParsedCredentials("postgres.njdpstizttwhrbuikjup", "secret")));
     }
 
     @Test
