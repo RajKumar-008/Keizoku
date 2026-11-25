@@ -55,19 +55,26 @@ public class DatabaseConfig {
         String activeProfile = String.join(",", env.getActiveProfiles());
         log.info("Initializing DataSource for active profiles: [{}]", activeProfile.isEmpty() ? "default" : activeProfile);
 
-        // Normalize URL (converts postgresql:// to jdbc:postgresql:// and ensures sslmode=require)
+        // Normalize URL (converts postgresql:// to jdbc:postgresql://, strips embedded/query credentials, ensures sslmode=require)
         String jdbcUrl = normalizeJdbcUrl(rawUrl);
 
-        // Prepare H2 directory and handle data safety if using H2 file storage
+        if (jdbcUrl == null || jdbcUrl.isBlank()) {
+            throw new IllegalStateException("Database JDBC URL is missing. Set SUPABASE_DB_URL.");
+        }
+
+        // Prepare H2 directory and handle data safety ONLY when explicitly using H2 storage
         if (jdbcUrl.startsWith("jdbc:h2:file:") || jdbcUrl.startsWith("jdbc:h2:")) {
             prepareH2Storage(jdbcUrl);
         }
 
-        // Check if credentials are embedded in URL (e.g. postgresql://user:pass@host:port/db)
-        ParsedCredentials creds = extractCredentialsIfEmbedded(rawUrl, username, password);
+        // Configured credentials (SUPABASE_DB_USERNAME / SUPABASE_DB_PASSWORD) take strict precedence
+        ParsedCredentials creds = resolveCredentials(rawUrl, username, password);
 
-        if (jdbcUrl != null && jdbcUrl.startsWith("jdbc:postgresql:")) {
+        if (jdbcUrl.startsWith("jdbc:postgresql:")) {
             validatePostgresConfiguration(jdbcUrl, creds);
+            logSafePostgresDiagnostics(jdbcUrl, creds);
+        } else {
+            log.info("Database target configured: mode=H2, target={}", sanitizeUrlForLogging(jdbcUrl));
         }
 
         HikariConfig config = new HikariConfig();
@@ -185,12 +192,45 @@ public class DatabaseConfig {
             }
         }
 
+        // Strip any user/password query parameters so URL parameters never override SUPABASE_DB_USERNAME / SUPABASE_DB_PASSWORD
+        if (normalized.startsWith("jdbc:postgresql:")) {
+            normalized = sanitizePostgresQueryParams(normalized);
+        }
+
         // Enforce sslmode=require for PostgreSQL endpoints if not already specified
         if (normalized.startsWith("jdbc:postgresql:") && !normalized.contains("sslmode=")) {
             normalized += (normalized.contains("?") ? "&" : "?") + "sslmode=require";
         }
 
         return normalized;
+    }
+
+    private static String sanitizePostgresQueryParams(String url) {
+        int queryIdx = url.indexOf('?');
+        if (queryIdx < 0) {
+            return url;
+        }
+        String base = url.substring(0, queryIdx);
+        String query = url.substring(queryIdx + 1);
+        if (query.isBlank()) {
+            return base;
+        }
+        StringBuilder filtered = new StringBuilder();
+        for (String param : query.split("&")) {
+            if (param.isEmpty()) {
+                continue;
+            }
+            int eqIdx = param.indexOf('=');
+            String key = (eqIdx >= 0 ? param.substring(0, eqIdx) : param).trim().toLowerCase();
+            if ("user".equals(key) || "username".equals(key) || "password".equals(key)) {
+                continue;
+            }
+            if (filtered.length() > 0) {
+                filtered.append('&');
+            }
+            filtered.append(param);
+        }
+        return filtered.length() > 0 ? base + "?" + filtered : base;
     }
 
     private static int findAuthorityEnd(String url, int start) {
@@ -203,8 +243,7 @@ public class DatabaseConfig {
 
     /**
      * Fails fast when PostgreSQL is configured without valid credentials so the app
-     * never sends an empty username to Supabase (which triggers EINVALIDUSERINFO)
-     * and never silently falls back to H2.
+     * never sends an empty or truncated username to Supabase and never silently falls back to 'postgres' or H2.
      */
     public static void validatePostgresConfiguration(String jdbcUrl, ParsedCredentials creds) {
         if (creds.username == null || creds.username.isBlank()) {
@@ -219,6 +258,58 @@ public class DatabaseConfig {
             throw new IllegalStateException(
                     "Invalid Supabase Session Pooler username format: expected '<user>.<project_ref>' (e.g. 'postgres.njdpstizttwhrbuikjup').");
         }
+    }
+
+    private static void logSafePostgresDiagnostics(String jdbcUrl, ParsedCredentials creds) {
+        String host = "unknown";
+        String port = "5432";
+        String dbName = "unknown";
+        String sslMode = jdbcUrl.contains("sslmode=") ? jdbcUrl.replaceAll(".*sslmode=([^&]+).*", "$1") : "require";
+
+        try {
+            String clean = jdbcUrl.startsWith("jdbc:") ? jdbcUrl.substring(5) : jdbcUrl;
+            URI uri = URI.create(clean);
+            if (uri.getHost() != null) {
+                host = uri.getHost();
+            }
+            if (uri.getPort() > 0) {
+                port = String.valueOf(uri.getPort());
+            }
+            if (uri.getPath() != null && uri.getPath().length() > 1) {
+                dbName = uri.getPath().substring(1);
+            }
+        } catch (Exception ignored) {
+            // Keep safe defaults
+        }
+
+        String connectionMode;
+        if (host.contains("pooler.supabase.com")) {
+            connectionMode = "6543".equals(port) ? "Supabase Transaction Pooler" : "Supabase Session Pooler";
+        } else {
+            connectionMode = "PostgreSQL Direct";
+        }
+
+        boolean usernameConfigured = creds.username != null && !creds.username.isBlank();
+        boolean passwordConfigured = creds.password != null && !creds.password.isEmpty();
+        boolean hasProjectRefSuffix = usernameConfigured && creds.username.contains(".");
+
+        log.info("PostgreSQL Diagnostics -> host={}, port={}, database={}, mode={}, sslmode={}, usernameConfigured={}, usernameHasProjectRef={}, passwordConfigured={}",
+                host, port, dbName, connectionMode, sslMode, usernameConfigured, hasProjectRefSuffix, passwordConfigured);
+    }
+
+    /**
+     * Resolves credentials giving strict priority to configured properties (SUPABASE_DB_USERNAME / SUPABASE_DB_PASSWORD).
+     * Only inspects embedded URL credentials if configured properties are blank.
+     */
+    public static ParsedCredentials resolveCredentials(String url, String configuredUser, String configuredPass) {
+        boolean hasConfiguredUser = configuredUser != null && !configuredUser.isBlank();
+        boolean hasConfiguredPass = configuredPass != null && !configuredPass.isEmpty();
+        if (hasConfiguredUser || hasConfiguredPass) {
+            return new ParsedCredentials(
+                    hasConfiguredUser ? configuredUser : "",
+                    hasConfiguredPass ? configuredPass : "");
+        }
+        return extractCredentialsIfEmbedded(url, "", "");
     }
 
     /**
@@ -268,8 +359,9 @@ public class DatabaseConfig {
      */
     public static String sanitizeUrlForLogging(String url) {
         if (url == null) return "null";
-        // Strip credentials if present
-        return url.replaceAll("://.*?:.*?@", "://***:***@");
+        // Strip authority credentials and query credentials if present
+        return url.replaceAll("://.*?:.*?@", "://***:***@")
+                  .replaceAll("(?i)([?&](?:user|username|password)=)[^&]*", "$1***");
     }
 
     public static class ParsedCredentials {

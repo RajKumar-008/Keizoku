@@ -82,6 +82,24 @@ public class SupabaseConnectionTest {
     }
 
     @Test
+    @DisplayName("URL Query & Credential Precedence: Strips URL user/password params and preserves full SUPABASE_DB_USERNAME")
+    void testUrlQuerySanitizationAndCredentialPrecedence() {
+        String urlWithQueryUser = "jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?user=postgres&password=wrong&sslmode=require";
+        String normalized = DatabaseConfig.normalizeJdbcUrl(urlWithQueryUser);
+
+        assertEquals("jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?sslmode=require", normalized);
+        assertFalse(normalized.contains("user="), "URL must not override SUPABASE_DB_USERNAME");
+        assertFalse(normalized.contains("password="), "URL must not embed password parameter");
+
+        String urlWithEmbeddedUser = "postgresql://postgres:wrong@aws-0-ap-south-1.pooler.supabase.com:5432/postgres";
+        DatabaseConfig.ParsedCredentials creds = DatabaseConfig.resolveCredentials(
+                urlWithEmbeddedUser, "postgres.njdpstizttwhrbuikjup", "real#pass@123");
+
+        assertEquals("postgres.njdpstizttwhrbuikjup", creds.username, "Full Session Pooler username must be preserved");
+        assertEquals("real#pass@123", creds.password, "Configured SUPABASE_DB_PASSWORD must take precedence");
+    }
+
+    @Test
     @DisplayName("Live Supabase Connectivity Probe: Executed when environment variables are supplied")
     void testLiveSupabaseConnectivityIfConfigured() {
         String dbUrl = System.getenv("SUPABASE_DB_URL");
