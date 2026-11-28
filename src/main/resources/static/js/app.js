@@ -2072,6 +2072,7 @@ const App = (() => {
     const css = getComputedStyle(document.documentElement);
     const text3 = css.getPropertyValue('--text-3').trim();
     const borderCol = css.getPropertyValue('--border').trim();
+    const surfaceCol = css.getPropertyValue('--surface-2').trim();
     const brandInk = css.getPropertyValue('--brand-ink').trim();
     const brandSoft = css.getPropertyValue('--brand-soft').trim();
 
@@ -2152,7 +2153,8 @@ const App = (() => {
             datasets: [{
               data: counts,
               backgroundColor: colors,
-              borderWidth: 0
+              borderColor: surfaceCol,
+              borderWidth: 2
             }]
           },
           options: {
@@ -2447,7 +2449,7 @@ const App = (() => {
     localStorage.setItem('dayforge_theme', resolved);
 
     const metaTheme = document.getElementById('metaThemeColor');
-    if (metaTheme) metaTheme.setAttribute('content', resolved === 'dark' ? '#0F1714' : '#244C3B');
+    if (metaTheme) metaTheme.setAttribute('content', resolved === 'dark' ? '#0E1412' : '#1C4736');
 
     const iconSun = document.getElementById('iconSun');
     const iconMoon = document.getElementById('iconMoon');
