@@ -3,267 +3,362 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#244C3B" id="metaThemeColor">
+  <meta name="description" content="KEIZOKU — Calm, disciplined daily habit tracking, streaks, goals, and productivity insights.">
   <title>KEIZOKU | Consistency and Persistence</title>
-  <link rel="stylesheet" href="css/nature-productivity.css">
-  <!-- Chart.js for beautiful productivity analytics charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23244C3B'/%3E%3Cpath d='M16 6C16 6 22.5 11.5 22.5 17C22.5 20.59 19.59 23.5 16 23.5C12.41 23.5 9.5 20.59 9.5 17C9.5 11.5 16 6 16 6Z' fill='%23C9D9B8' fill-opacity='0.3' stroke='%23E4EDDA' stroke-width='2'/%3E%3Cpath d='M16 10V24' stroke='%23E4EDDA' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/nature-productivity.css?v=2">
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
-<div class="app-container">
+<div class="app-container" id="appShell">
+  <div class="sidebar-scrim" id="sidebarScrim" aria-hidden="true"></div>
 
-  <!-- Desktop Sidebar Navigation -->
-  <aside class="sidebar" id="sidebar">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar" aria-label="Sidebar">
     <div class="brand-section">
-      <div class="brand-icon" title="KEIZOKU - Continuous Growth">
-        <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="KEIZOKU Logo">
-          <!-- Minimalist circular symbol representing continuous growth -->
+      <div class="brand-icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="66 14" opacity="0.95"/>
-          <!-- Subtle leaf-inspired element symbolizing continuous persistent growth -->
           <path d="M16 5.5C16 5.5 23 11.5 23 17.5C23 21.366 19.866 24.5 16 24.5C12.134 24.5 9 21.366 9 17.5C9 11.5 16 5.5 16 5.5Z" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-          <!-- Central growth spine representing steady upward momentum -->
           <path d="M16 9.5V24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <!-- Minimalist leaf veins -->
           <path d="M16 14.5C18.2 13 20 12 20 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           <path d="M16 18C13.8 16.5 12 15.5 12 15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="brand-info">
-        <h2>KEIZOKU</h2>
-        <span>Consistency and Persistence.</span>
+        <span class="brand-wordmark">KEIZOKU</span>
+        <span class="brand-tagline">Consistency &amp; Persistence</span>
       </div>
+      <button type="button" class="btn-icon sidebar-collapse-btn" id="btnSidebarCollapse" aria-label="Collapse sidebar" aria-pressed="false" title="Collapse sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button type="button" class="btn-icon sidebar-close-btn" id="btnSidebarClose" aria-label="Close navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
     </div>
 
-    <ul class="nav-menu">
-      <li class="nav-item">
-        <a class="nav-link active" data-section="dashboard">
-          <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-          Dashboard
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="today">
-          <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-          Today's Checklist
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="habits">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          My Habits
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="calendar">
-          <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-          Calendar
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="history">
-          <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-          History
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="streaks">
-          <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-          Streaks &amp; Badges
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="reports">
-          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
-          Reports &amp; Analytics
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="notifications">
-          <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-          Notifications
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="settings">
-          <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-          Settings
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-section="profile">
-          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          Profile
-        </a>
-      </li>
-    </ul>
+    <nav class="nav-scroll" aria-label="Primary navigation">
+      <div class="nav-group">
+        <div class="nav-group-label">Overview</div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <button type="button" class="nav-link active" data-section="dashboard" aria-current="page">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+              <span class="nav-label">Dashboard</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="today">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+              <span class="nav-label">Today's Checklist</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Track</div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="habits">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <span class="nav-label">My Habits</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="goals">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2zm0 4a6 6 0 1 0 6 6h-2a4 4 0 1 1-4-4V6zm0 4a2 2 0 1 0 2 2 2 2 0 0 0-2-2z"/></svg>
+              <span class="nav-label">Goals</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="calendar">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+              <span class="nav-label">Calendar</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Insights</div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="history">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+              <span class="nav-label">History</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="streaks">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
+              <span class="nav-label">Streaks &amp; Badges</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="reports">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+              <span class="nav-label">Reports</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">Account</div>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="notifications">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              <span class="nav-label">Notifications</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+              <span class="nav-label">Settings</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="nav-link" data-section="profile">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              <span class="nav-label">Profile</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
     <!-- Sidebar Bottom User Block -->
     <div class="sidebar-user">
       <div class="user-summary" id="sidebarUserBlock">
-        <div class="user-avatar" id="avatarInitial">U</div>
+        <div class="user-avatar" id="avatarInitial" aria-hidden="true">U</div>
         <div class="user-meta">
           <span class="user-name" id="userNameLabel">Productivity User</span>
           <span class="user-role" id="userRoleLabel">Member</span>
         </div>
       </div>
-      <button class="btn-item-action" id="btnSidebarAuthToggle" title="Account / Switch User" style="color:var(--white);">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      <button type="button" class="btn-icon sidebar-auth-btn" id="btnSidebarAuthToggle" aria-label="Switch account or sign in" title="Switch account">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
       </button>
     </div>
   </aside>
 
   <!-- Main Content Area -->
-  <main class="main-wrapper">
+  <div class="main-shell">
     <!-- Topbar Header -->
     <header class="topbar">
       <div class="topbar-left">
-        <button class="btn-mobile-toggle" id="btnMobileMenuToggle" aria-label="Toggle navigation">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        <button type="button" class="btn-icon btn-mobile-toggle" id="btnMobileMenuToggle" aria-label="Open navigation menu" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
-        <span class="today-badge-pill" id="topbarDateBadge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
-          <span id="topbarDateText">Loading today...</span>
-        </span>
+        <div class="topbar-title-group">
+          <h1 class="topbar-title" id="topbarPageTitle">Dashboard</h1>
+          <span class="topbar-date" id="topbarDateBadge">
+            <span id="topbarDateText">Today</span>
+          </span>
+        </div>
       </div>
 
       <div class="topbar-right">
-        <!-- Quick Stats in Topbar -->
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span class="today-badge-pill" style="background-color:#FEE8D6; border-color:#FAD1B0; color:#D9822B;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-            <span id="topbarStreakText">0 Day Streak</span>
-          </span>
+        <span class="streak-pill" id="topbarStreakPill" title="Current active streak">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
+          <span class="tabular-num" id="topbarStreakText">0 Day Streak</span>
+        </span>
+
+        <button type="button" class="btn-forge btn-forge-ghost btn-icon-sq" id="btnTopBell" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span class="unread-dot is-hidden" id="unreadNoticeBadge" aria-label="Unread notifications"></span>
+        </button>
+
+        <button type="button" class="btn-forge btn-forge-ghost btn-icon-sq" id="btnThemeToggle" aria-label="Switch to dark theme">
+          <svg id="iconSun" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+          <svg id="iconMoon" class="is-hidden" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.34 2.02C6.59 1.82 2 6.42 2 12c0 5.52 4.48 10 10 10 3.71 0 6.93-2.02 8.66-5.02-7.51-.25-12.09-8.43-8.32-14.96z"/></svg>
+        </button>
+
+        <div class="dropdown-wrap" id="topbarAvatarMenuWrap">
+          <button type="button" class="topbar-avatar-btn" id="btnTopbarAvatarMenu" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">
+            <span class="topbar-avatar-circle" id="topbarAvatarInitial">U</span>
+          </button>
+          <div class="dropdown-menu is-hidden" id="topbarAvatarMenu" role="menu" aria-label="Account actions">
+            <button type="button" class="dropdown-item" role="menuitem" data-avatar-action="profile">Profile</button>
+            <button type="button" class="dropdown-item" role="menuitem" data-avatar-action="settings">Settings</button>
+            <div class="dropdown-divider" role="separator"></div>
+            <button type="button" class="dropdown-item dropdown-item--danger" role="menuitem" data-avatar-action="logout">Sign out</button>
+          </div>
         </div>
-
-        <!-- Notification Bell -->
-        <button class="btn-forge btn-forge-secondary btn-forge-sm" id="btnTopBell" title="Notifications">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
-          <span id="unreadNoticeBadge" style="display:none; width:7px; height:7px; background:var(--accent-red); border-radius:50%;"></span>
-        </button>
-
-        <!-- Theme Toggle -->
-        <button class="btn-forge btn-forge-secondary btn-forge-sm" id="btnThemeToggle" title="Toggle Light/Dark Theme">
-          <svg id="iconSun" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
-        </button>
       </div>
     </header>
 
     <!-- App Body Views -->
-    <div class="content-body">
+    <main class="content-body" id="main" tabindex="-1">
 
       <!-- ========================================================== -->
       <!-- SECTION 1: DASHBOARD                                       -->
       <!-- ========================================================== -->
-      <section class="section-view active" id="view-dashboard">
-        <!-- Motivational Nature Banner -->
-        <div class="card-forge" style="background: linear-gradient(135deg, var(--forest-green), #1D3F30); color:white; border:none;">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
-            <div>
-              <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--leaf-green); font-weight:700;">Nature Productivity Philosophy</span>
-              <h2 style="color:white; margin:6px 0 8px 0; font-size:1.45rem;">Discipline is built one day at a time.</h2>
-              <p style="color:var(--leaf-soft); margin:0; font-size:0.92rem; max-width:650px;" id="dashboardQuoteText">
-                "Small daily actions compound silently into enduring character. Tend your habits like a healthy forest."
-              </p>
+      <section class="section-view active" id="view-dashboard" aria-labelledby="dashboardGreeting">
+        <!-- Editorial Hero Card -->
+        <div class="hero-card">
+          <div class="hero-copy">
+            <span class="eyebrow">Daily Practice</span>
+            <h2 class="hero-title" id="dashboardGreeting">Good day, welcome back.</h2>
+            <p class="hero-sub" id="dashboardDateSub">Steady small actions build lasting momentum.</p>
+            <p class="hero-quote" id="dashboardQuoteText">
+              "Small daily actions compound silently into enduring character. Tend your habits like a healthy forest."
+            </p>
+            <div class="hero-actions">
+              <button type="button" class="btn-forge btn-forge-hero" onclick="App.navigateTo('today')">
+                Open Today's Checklist
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
             </div>
-            <button class="btn-forge btn-forge-secondary" onclick="App.navigateTo('today')">
-              Open Today's Checklist &rarr;
-            </button>
+          </div>
+
+          <div class="hero-ring-wrap" aria-label="Today's completion progress">
+            <svg class="hero-ring-svg" width="124" height="124" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="hero-ring-track" cx="60" cy="60" r="50" fill="none" stroke-width="8"/>
+              <circle class="hero-ring-fill" id="dashProgressRingCircle" cx="60" cy="60" r="50" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+            </svg>
+            <div class="hero-ring-label">
+              <span class="display-num hero-ring-pct" id="dashHeroScore">0%</span>
+              <span class="hero-ring-caption">Today</span>
+            </div>
           </div>
         </div>
 
         <!-- 4 Stat Summary Cards -->
         <div class="grid-4">
           <div class="stat-card">
-            <div class="stat-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <div class="stat-icon stat-icon--brand" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
             </div>
-            <div>
-              <div class="stat-value" id="dashTodayScore">0%</div>
+            <div class="stat-body">
               <div class="stat-label">Today's Completion</div>
+              <div class="stat-value tabular-num" id="dashTodayScore">0%</div>
+              <div class="stat-context" id="dashTodayContext">No tasks scheduled yet</div>
             </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-icon streak">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+            <div class="stat-icon stat-icon--amber" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
             </div>
-            <div>
-              <div class="stat-value" id="dashCurrentStreak">0</div>
-              <div class="stat-label">Current Streak Days</div>
-            </div>
-          </div>
-
-          <div class="stat-card">
-            <div class="stat-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.9-.3 3.5-1.5 4.39-3.06A5.008 5.008 0 0 0 21 8V7c0-1.1-.9-2-2-2z"/></svg>
-            </div>
-            <div>
-              <div class="stat-value" id="dashLongestStreak">0</div>
-              <div class="stat-label">Longest Streak Record</div>
+            <div class="stat-body">
+              <div class="stat-label">Current Streak</div>
+              <div class="stat-value tabular-num" id="dashCurrentStreak">0</div>
+              <div class="stat-context" id="dashStreakContext">Complete 100% today</div>
             </div>
           </div>
 
           <div class="stat-card">
-            <div class="stat-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <div class="stat-icon stat-icon--teal" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H7v2h10v-2h-4v-3.1c1.9-.3 3.5-1.5 4.39-3.06A5.008 5.008 0 0 0 21 8V7c0-1.1-.9-2-2-2z"/></svg>
             </div>
-            <div>
-              <div class="stat-value" id="dashTotalHabitsCount">0</div>
+            <div class="stat-body">
+              <div class="stat-label">Personal Best</div>
+              <div class="stat-value tabular-num" id="dashLongestStreak">0</div>
+              <div class="stat-context">Longest consecutive run</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon stat-icon--info" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <div class="stat-body">
               <div class="stat-label">Active Habits</div>
+              <div class="stat-value tabular-num" id="dashTotalHabitsCount">0</div>
+              <div class="stat-context">Recurring schedules</div>
             </div>
           </div>
         </div>
 
-        <!-- 2 Column Layout: Today's Focus & Goals Overview -->
-        <div class="grid-2" style="margin-top:22px;">
-          <!-- Left Column: Today's Checklist Quick Glance -->
+        <!-- 2 Column Layout: Today's Focus & Right Column -->
+        <div class="dashboard-columns">
+          <!-- Left Column: Today's Focus -->
           <div class="card-forge">
             <div class="card-header-clean">
-              <h3 class="card-title-clean">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-                Today's Focus Checklist
-              </h3>
-              <span id="dashCompletedCountBadge" class="item-category-tag">0 / 0 Done</span>
+              <div>
+                <h2 class="card-title-clean">Today's Focus</h2>
+                <p class="card-subtitle">Top items from your daily checklist</p>
+              </div>
+              <span id="dashCompletedCountBadge" class="metric-pill tabular-num">0 / 0 Done</span>
             </div>
 
-            <!-- Quick Batch Add on Dashboard -->
-            <div class="batch-input-box" style="margin-bottom:14px; padding:12px 16px;">
-              <div style="font-weight:600; font-size:0.82rem; color:var(--forest-green); margin-bottom:6px;">
-                Quick Activity Add (Comma-separated)
-              </div>
-              <div style="display:flex; gap:8px;">
-                <input type="text" id="dashQuickBatchInput" class="form-control-nature" placeholder="Workout, Study, Practice, Coding..." style="font-size:0.86rem; padding:8px 12px;">
-                <button class="btn-forge btn-forge-primary btn-forge-sm" id="btnDashBatchAdd">Add</button>
+            <!-- Inline Quick Add -->
+            <div class="quick-add-box">
+              <label for="dashQuickBatchInput" class="quick-add-label">Quick add (comma-separated supported)</label>
+              <div class="quick-add-row">
+                <input type="text" id="dashQuickBatchInput" class="form-control-nature" placeholder="Workout, Study, Practice, Coding...">
+                <select id="dashQuickCategorySelect" class="form-control-nature quick-add-cat" aria-label="Default category for quick add">
+                  <option value="GENERAL">General</option>
+                  <option value="HEALTH">Health</option>
+                  <option value="LEARNING">Learning</option>
+                  <option value="CAREER">Career</option>
+                  <option value="MINDFULNESS">Mindfulness</option>
+                </select>
+                <button type="button" class="btn-forge btn-forge-primary btn-forge-sm" id="btnDashBatchAdd">Add</button>
               </div>
             </div>
 
             <div id="dashTodayItemList" class="checklist-container">
-              <!-- Rendered via JS -->
-              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.88rem;">
-                Loading today's checklist...
-              </div>
+              <div class="skeleton skeleton-row"></div>
+              <div class="skeleton skeleton-row"></div>
+              <div class="skeleton skeleton-row"></div>
             </div>
 
-            <div style="margin-top:16px; text-align:right;">
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.navigateTo('today')">
-                Manage Full Checklist &rarr;
+            <div class="card-footer-action">
+              <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" onclick="App.navigateTo('today')">
+                View all tasks &rarr;
               </button>
             </div>
           </div>
 
-          <!-- Right Column: Streaks & Achievements Summary -->
-          <div>
-            <!-- Recent Achievement Highlights -->
+          <!-- Right Column: Goals Widget, Milestones Strip, 7-Day Mini Heatmap -->
+          <div class="dashboard-right-stack">
+            <!-- Goals Widget -->
             <div class="card-forge">
               <div class="card-header-clean">
-                <h3 class="card-title-clean">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-                  Discipline Milestones
-                </h3>
-                <button class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.navigateTo('streaks')">View All</button>
+                <div class="title-with-badge">
+                  <h2 class="card-title-clean">Active Goals</h2>
+                  <span class="metric-pill tabular-num" id="dashActiveGoalsCount">0</span>
+                </div>
+                <div class="card-header-actions">
+                  <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" onclick="App.navigateTo('goals')">Manage</button>
+                </div>
               </div>
-              <div id="dashMilestonesList" style="display:flex; gap:12px; overflow-x:auto; padding-bottom:6px;">
-                <!-- Rendered via JS -->
+              <div id="dashGoalsList">
+                <div class="skeleton skeleton-row"></div>
+                <div class="skeleton skeleton-row"></div>
+              </div>
+            </div>
+
+            <!-- Discipline Milestones Strip -->
+            <div class="card-forge">
+              <div class="card-header-clean">
+                <h2 class="card-title-clean">Discipline Milestones</h2>
+                <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" onclick="App.navigateTo('streaks')">View All</button>
+              </div>
+              <div id="dashMilestonesList" class="milestones-strip">
+                <div class="skeleton skeleton-tile"></div>
+                <div class="skeleton skeleton-tile"></div>
+                <div class="skeleton skeleton-tile"></div>
+              </div>
+            </div>
+
+            <!-- 7-Day Mini Heatmap -->
+            <div class="card-forge">
+              <div class="card-header-clean">
+                <h2 class="card-title-clean">Last 7 Days</h2>
+                <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" onclick="App.navigateTo('calendar')">Calendar</button>
+              </div>
+              <div id="dashMiniHeatmap" class="mini-heatmap-grid">
+                <div class="skeleton skeleton-tile"></div>
               </div>
             </div>
           </div>
@@ -272,54 +367,69 @@
 
 
       <!-- ========================================================== -->
-      <!-- SECTION 2: TODAY'S CHECKLIST (MAIN AUTOMATIC CHECKLIST)    -->
+      <!-- SECTION 2: TODAY'S CHECKLIST                               -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-today">
+      <section class="section-view" id="view-today" aria-labelledby="todayHeading">
         <div class="card-forge">
-          <div class="card-header-clean" style="flex-wrap:wrap; gap:12px;">
+          <div class="card-header-clean">
             <div>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">Today's Daily Checklist</h2>
-                <span class="today-badge-pill" id="todayChecklistDateLabel">Loading...</span>
+              <div class="title-with-badge">
+                <h2 class="section-heading" id="todayHeading">Today</h2>
+                <span class="date-chip" id="todayChecklistDateLabel">Loading...</span>
               </div>
-              <p style="margin:4px 0 0 0; font-size:0.86rem; color:var(--text-muted);">
-                Automatic daily schedule generated from your active habits and configured date ranges.
-              </p>
+              <p class="card-subtitle">Generated from your active habits and custom tasks for today.</p>
+            </div>
+
+            <div class="today-header-actions">
+              <div class="split-btn-group" role="group" aria-label="Add task options">
+                <button type="button" class="btn-forge btn-forge-primary btn-forge-sm split-btn-main" id="btnOpenSingleAddModal">
+                  + Add task
+                </button>
+                <button type="button" class="btn-forge btn-forge-primary btn-forge-sm split-btn-secondary" id="btnOpenBatchAddModal" title="Batch add multiple comma-separated tasks">
+                  Batch add
+                </button>
+              </div>
+              <button type="button" class="btn-forge btn-forge-outline btn-forge-sm" id="btnCompleteAllToday">
+                Complete all
+              </button>
             </div>
           </div>
 
-          <!-- Progress Overview Card for Today -->
-          <div style="background-color:var(--cream-light); border:1px solid var(--cream-dark); border-radius:var(--radius-md); padding:16px 20px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-            <div style="flex:1; min-width:240px;">
-              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-weight:600; font-size:0.88rem;">
-                <span style="color:var(--forest-green);">Daily Completion Status</span>
-                <span id="todayCompletionPercentLabel">0%</span>
+          <!-- Sticky Progress Summary -->
+          <div class="today-progress-sticky">
+            <div class="today-progress-top">
+              <span class="today-progress-label">Daily Completion</span>
+              <div class="today-progress-numbers tabular-num">
+                <span class="today-progress-fraction"><strong id="todayCompletedTasksCount">0</strong> of <strong id="todayTotalTasksCount">0</strong></span>
+                <span class="today-progress-rem">(<span id="todayRemainingTasksCount">0</span> remaining)</span>
+                <strong class="today-progress-pct" id="todayCompletionPercentLabel">0%</strong>
               </div>
-              <div class="progress-bar-nature" style="height:10px;">
-                <div class="progress-bar-fill" id="todayProgressBarFill" style="width:0%;"></div>
-              </div>
-              <div style="display:flex; gap:14px; margin-top:8px; font-size:0.78rem; color:var(--text-muted);">
-                <span>Total: <strong id="todayTotalTasksCount">0</strong></span>
-                <span>Completed: <strong id="todayCompletedTasksCount" style="color:var(--forest-green);">0</strong></span>
-                <span>Remaining: <strong id="todayRemainingTasksCount" style="color:var(--accent-amber);">0</strong></span>
-              </div>
+            </div>
+            <div class="progress-bar-nature progress-bar-nature--sm">
+              <div class="progress-bar-fill" id="todayProgressBarFill"></div>
             </div>
           </div>
 
-          <!-- Category Filter Bar -->
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px; overflow-x:auto; padding-bottom:4px;">
-            <span style="font-size:0.8rem; font-weight:600; color:var(--text-muted);">Filter Category:</span>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm active" data-filter-cat="ALL" onclick="App.filterTodayCategory('ALL')">All</button>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm" data-filter-cat="HEALTH" onclick="App.filterTodayCategory('HEALTH')">Health &amp; Fitness</button>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm" data-filter-cat="LEARNING" onclick="App.filterTodayCategory('LEARNING')">Learning &amp; Study</button>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm" data-filter-cat="CAREER" onclick="App.filterTodayCategory('CAREER')">Work &amp; Coding</button>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm" data-filter-cat="MINDFULNESS" onclick="App.filterTodayCategory('MINDFULNESS')">Mindfulness</button>
-            <button class="btn-forge btn-forge-secondary btn-forge-sm" data-filter-cat="GENERAL" onclick="App.filterTodayCategory('GENERAL')">General</button>
+          <!-- Category Filter Bar & Group Toggle -->
+          <div class="today-toolbar">
+            <div class="filter-chips-row" role="group" aria-label="Filter tasks by category">
+              <button type="button" class="chip" data-filter-cat="ALL" aria-pressed="true" onclick="App.filterTodayCategory('ALL')">All <span class="chip-count" data-cat-count="ALL">0</span></button>
+              <button type="button" class="chip" data-filter-cat="HEALTH" aria-pressed="false" onclick="App.filterTodayCategory('HEALTH')">Health <span class="chip-count" data-cat-count="HEALTH">0</span></button>
+              <button type="button" class="chip" data-filter-cat="LEARNING" aria-pressed="false" onclick="App.filterTodayCategory('LEARNING')">Learning <span class="chip-count" data-cat-count="LEARNING">0</span></button>
+              <button type="button" class="chip" data-filter-cat="CAREER" aria-pressed="false" onclick="App.filterTodayCategory('CAREER')">Career <span class="chip-count" data-cat-count="CAREER">0</span></button>
+              <button type="button" class="chip" data-filter-cat="MINDFULNESS" aria-pressed="false" onclick="App.filterTodayCategory('MINDFULNESS')">Mindfulness <span class="chip-count" data-cat-count="MINDFULNESS">0</span></button>
+              <button type="button" class="chip" data-filter-cat="GENERAL" aria-pressed="false" onclick="App.filterTodayCategory('GENERAL')">General <span class="chip-count" data-cat-count="GENERAL">0</span></button>
+            </div>
+            <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" id="btnGroupByCategory" aria-pressed="false">
+              Group by category
+            </button>
           </div>
 
           <!-- Main Checklist Items Container -->
           <div id="todayFullChecklistContainer" class="checklist-container">
-            <!-- Dynamic checklist items injected by JavaScript -->
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
           </div>
         </div>
       </section>
@@ -328,40 +438,85 @@
       <!-- ========================================================== -->
       <!-- SECTION 3: MY HABITS                                       -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-habits">
+      <section class="section-view" id="view-habits" aria-labelledby="habitsHeading">
         <div class="card-forge">
           <div class="card-header-clean">
             <div>
-              <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">My Recurring Habits</h2>
-              <p style="margin:4px 0 0 0; font-size:0.86rem; color:var(--text-muted);">
-                Define recurring habits with flexible date ranges and automatic daily generation.
-              </p>
+              <h2 class="section-heading" id="habitsHeading">My Recurring Habits</h2>
+              <p class="card-subtitle">Define recurring habits with flexible schedules and date ranges.</p>
             </div>
-            <button class="btn-forge btn-forge-primary" id="btnOpenAddHabitModal">
-              + Create New Habit
+            <button type="button" class="btn-forge btn-forge-primary" id="btnOpenAddHabitModal">
+              + Create Habit
             </button>
           </div>
 
-          <div id="habitsListContainer">
-            <!-- Rendered by JS -->
+          <div id="habitsListContainer" class="habits-grid">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
           </div>
         </div>
       </section>
 
+
       <!-- ========================================================== -->
-      <!-- SECTION 4: CALENDAR                                        -->
+      <!-- SECTION 4: GOALS                                           -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-calendar">
-        <div class="grid-2">
+      <section class="section-view" id="view-goals" aria-labelledby="goalsHeading">
+        <div class="card-forge">
+          <div class="card-header-clean">
+            <div>
+              <h2 class="section-heading" id="goalsHeading">Discipline Goals</h2>
+              <p class="card-subtitle">Commit to 7, 14, 28, 30-day, or custom consistency milestones.</p>
+            </div>
+            <button type="button" class="btn-forge btn-forge-primary" id="btnOpenAddGoalModal">
+              + New Goal
+            </button>
+          </div>
+
+          <div class="grid-3 goals-summary-strip">
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Active Goals</span>
+              <strong class="summary-mini-value tabular-num" id="goalsSummaryActive">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Completed</span>
+              <strong class="summary-mini-value summary-mini-value--brand tabular-num" id="goalsSummaryCompleted">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Best Streak</span>
+              <strong class="summary-mini-value summary-mini-value--amber tabular-num" id="goalsSummaryBestStreak">0 days</strong>
+            </div>
+          </div>
+
+          <div id="goalsGridContainer" class="habits-grid">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ========================================================== -->
+      <!-- SECTION 5: CALENDAR                                        -->
+      <!-- ========================================================== -->
+      <section class="section-view" id="view-calendar" aria-labelledby="calendarMonthYearLabel">
+        <div class="grid-2 calendar-layout">
           <!-- Left: Interactive Month Grid -->
           <div class="card-forge">
             <div class="card-header-clean">
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" id="btnCalPrevMonth">&larr; Prev</button>
-              <h3 class="card-title-clean" id="calendarMonthYearLabel">November 2026</h3>
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" id="btnCalNextMonth">Next &rarr;</button>
+              <div class="calendar-nav-group">
+                <button type="button" class="btn-forge btn-forge-ghost btn-icon-sq" id="btnCalPrevMonth" aria-label="Previous month">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <h2 class="card-title-clean" id="calendarMonthYearLabel">November 2026</h2>
+                <button type="button" class="btn-forge btn-forge-ghost btn-icon-sq" id="btnCalNextMonth" aria-label="Next month">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </div>
+              <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" id="btnCalToday">Today</button>
             </div>
 
-            <div class="calendar-grid">
+            <div class="calendar-grid" aria-hidden="true">
               <div class="calendar-header-day">Sun</div>
               <div class="calendar-header-day">Mon</div>
               <div class="calendar-header-day">Tue</div>
@@ -371,42 +526,38 @@
               <div class="calendar-header-day">Sat</div>
             </div>
 
-            <div id="calendarCellsContainer" class="calendar-grid" style="margin-top:6px;">
+            <div id="calendarCellsContainer" class="calendar-grid calendar-cells-wrap" role="grid" aria-label="Monthly completion calendar">
               <!-- Calendar day cells generated by JS -->
             </div>
 
             <!-- Legend -->
-            <div style="display:flex; justify-content:center; gap:16px; margin-top:18px; font-size:0.75rem; color:var(--text-muted); flex-wrap:wrap;">
-              <span style="display:flex; align-items:center; gap:4px;">
-                <span style="width:12px; height:12px; background:var(--forest-green); border-radius:2px;"></span> 100% Perfect
-              </span>
-              <span style="display:flex; align-items:center; gap:4px;">
-                <span style="width:12px; height:12px; background:var(--leaf-green); border-radius:2px;"></span> Partial
-              </span>
-              <span style="display:flex; align-items:center; gap:4px;">
-                <span style="width:12px; height:12px; background:#F8D7DA; border-radius:2px;"></span> Incomplete / Missed
-              </span>
-              <span style="display:flex; align-items:center; gap:4px;">
-                <span style="width:12px; height:12px; border:2px solid var(--forest-green); border-radius:2px;"></span> Today
-              </span>
-              <span style="display:flex; align-items:center; gap:4px;">
-                <span style="width:12px; height:12px; background:#FAFAFA; border:1px solid #E2E8F0; border-radius:2px;"></span> Future (Locked)
-              </span>
+            <div class="calendar-legend" aria-label="Calendar status legend">
+              <span class="legend-chip"><span class="legend-swatch legend-swatch--perfect" aria-hidden="true"></span>✓ 100% Perfect</span>
+              <span class="legend-chip"><span class="legend-swatch legend-swatch--partial" aria-hidden="true"></span>◐ Partial</span>
+              <span class="legend-chip"><span class="legend-swatch legend-swatch--missed" aria-hidden="true"></span>✕ Missed</span>
+              <span class="legend-chip"><span class="legend-swatch legend-swatch--today" aria-hidden="true"></span>Today</span>
+              <span class="legend-chip"><span class="legend-swatch legend-swatch--future" aria-hidden="true"></span>Locked</span>
             </div>
           </div>
 
           <!-- Right: Selected Date Inspection Details -->
-          <div class="card-forge">
+          <div class="card-forge" id="calendarInspectorCard">
             <div class="card-header-clean">
               <div>
                 <h3 class="card-title-clean" id="selectedDateInspectorTitle">Date Details</h3>
-                <span id="selectedDateProtectionBadge" class="item-category-tag" style="margin-top:4px;">Read Only History</span>
+                <span id="selectedDateProtectionBadge" class="status-badge status-badge--info">Read Only History</span>
               </div>
-              <div id="selectedDateScoreBadge" style="font-size:1.1rem; font-weight:700; color:var(--forest-green);">100%</div>
+              <div class="inspector-score-wrap">
+                <svg class="inspector-ring-svg" width="52" height="52" viewBox="0 0 52 52" aria-hidden="true">
+                  <circle class="hero-ring-track" cx="26" cy="26" r="21" fill="none" stroke-width="4.5"/>
+                  <circle class="inspector-ring-fill" id="selectedDateRingCircle" cx="26" cy="26" r="21" fill="none" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="131.95" stroke-dashoffset="131.95"/>
+                </svg>
+                <span class="inspector-score-text tabular-num" id="selectedDateScoreBadge">0%</span>
+              </div>
             </div>
 
             <div id="selectedDateChecklistDetails" class="checklist-container">
-              <p style="color:var(--text-muted); font-size:0.88rem;">Select any date on the calendar to inspect historical records or view today's active list.</p>
+              <p class="muted-copy">Select any past or current date on the calendar to inspect records.</p>
             </div>
           </div>
         </div>
@@ -416,23 +567,59 @@
       <!-- ========================================================== -->
       <!-- SECTION 6: HISTORY                                         -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-history">
+      <section class="section-view" id="view-history" aria-labelledby="historyHeading">
         <div class="card-forge">
           <div class="card-header-clean">
             <div>
-              <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">Historical Completion Log</h2>
-              <p style="margin:4px 0 0 0; font-size:0.86rem; color:var(--text-muted);">
-                Permanent record of your past daily achievements. Read-only by default to preserve integrity.
-              </p>
+              <h2 class="section-heading" id="historyHeading">Historical Completion Log</h2>
+              <p class="card-subtitle">Permanent read-only archive of your daily consistency.</p>
             </div>
-            <div style="display:flex; gap:10px;">
-              <input type="date" id="historyDateFilter" class="form-control-nature" style="padding:6px 12px; font-size:0.84rem;">
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" id="btnResetHistoryFilter">Reset</button>
+            <div class="history-toolbar">
+              <div class="toolbar-field">
+                <label for="historyDateFilter" class="sr-only">Filter by date</label>
+                <input type="date" id="historyDateFilter" class="form-control-nature form-control-sm">
+              </div>
+              <div class="toolbar-field">
+                <label for="historyStatusFilter" class="sr-only">Filter by status</label>
+                <select id="historyStatusFilter" class="form-control-nature form-control-sm">
+                  <option value="ALL">All statuses</option>
+                  <option value="PERFECT">100% Perfect</option>
+                  <option value="PARTIAL">Partial</option>
+                  <option value="MISSED">Missed</option>
+                </select>
+              </div>
+              <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" id="btnResetHistoryFilter">Reset</button>
+              <div class="dropdown-wrap">
+                <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" id="btnHistoryExportMenu" aria-haspopup="menu" aria-expanded="false">
+                  Export &darr;
+                </button>
+                <div class="dropdown-menu is-hidden" id="historyExportDropdown" role="menu">
+                  <button type="button" class="dropdown-item" role="menuitem" onclick="App.exportReportCSV()">Export CSV</button>
+                  <button type="button" class="dropdown-item" role="menuitem" onclick="App.exportReportJSON()">Export JSON</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3 goals-summary-strip" id="historySummaryStrip">
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Days Logged</span>
+              <strong class="summary-mini-value tabular-num" id="historyDaysLogged">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Perfect Days</span>
+              <strong class="summary-mini-value summary-mini-value--brand tabular-num" id="historyPerfectDays">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Average Completion</span>
+              <strong class="summary-mini-value tabular-num" id="historyAvgCompletion">0%</strong>
             </div>
           </div>
 
           <div id="historyTableContainer">
-            <!-- Rendered by JS -->
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
+            <div class="skeleton skeleton-row"></div>
           </div>
         </div>
       </section>
@@ -441,49 +628,75 @@
       <!-- ========================================================== -->
       <!-- SECTION 7: STREAKS & ACHIEVEMENTS                          -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-streaks">
+      <section class="section-view" id="view-streaks" aria-labelledby="streaksHeading">
         <div class="card-forge">
           <div class="card-header-clean">
             <div>
-              <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">Consecutive-Day Streak Engine</h2>
-              <p style="margin:4px 0 0 0; font-size:0.86rem; color:var(--text-muted);">
-                Streaks increment strictly when 100% of required daily checklist tasks are completed.
-              </p>
+              <h2 class="section-heading" id="streaksHeading">Streak Engine &amp; Milestones</h2>
+              <p class="card-subtitle">Streaks advance on consecutive days with 100% checklist completion.</p>
             </div>
           </div>
 
-          <!-- Streak Counter Big Display -->
-          <div style="background: linear-gradient(135deg, #FFF6EC, var(--leaf-soft)); border:1px solid #FAD1B0; border-radius:var(--radius-lg); padding:24px; display:flex; align-items:center; justify-content:space-around; flex-wrap:wrap; gap:20px; text-align:center;">
-            <div>
-              <div style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-amber); font-weight:700;">Active Daily Streak</div>
-              <div style="font-size:3.5rem; font-weight:800; color:var(--accent-amber); line-height:1;" id="streakBigNumber">0</div>
-              <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Consecutive Days 100% Done</div>
+          <!-- Streak Hero Banner -->
+          <div class="streak-hero-card">
+            <div class="streak-hero-main">
+              <div class="streak-hero-icon" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
+              </div>
+              <div>
+                <div class="streak-hero-eyebrow">Active Daily Streak</div>
+                <div class="streak-hero-num-row">
+                  <span class="display-num streak-hero-num" id="streakBigNumber">0</span>
+                  <span class="streak-hero-unit">days</span>
+                </div>
+              </div>
             </div>
 
-            <div style="height:60px; width:1px; background:#E8DACB;" class="d-none d-md-block"></div>
-
-            <div>
-              <div style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--forest-green); font-weight:700;">Best Personal Streak</div>
-              <div style="font-size:3.5rem; font-weight:800; color:var(--forest-green); line-height:1;" id="longestBigNumber">0</div>
-              <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Longest Consecutive Run</div>
-            </div>
-
-            <div style="height:60px; width:1px; background:#E8DACB;" class="d-none d-md-block"></div>
-
-            <div>
-              <div style="font-size:0.82rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); font-weight:700;">Total Perfect Days</div>
-              <div style="font-size:3.5rem; font-weight:800; color:var(--text-primary); line-height:1;" id="totalSuccessfulBigNumber">0</div>
-              <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">All-time Successful Days</div>
+            <div class="streak-next-milestone">
+              <div class="streak-next-meta">
+                <span id="streakNextMilestoneLabel">Next milestone: 7-day streak</span>
+                <span class="tabular-num" id="streakNextMilestoneRatio">0 / 7</span>
+              </div>
+              <div class="progress-bar-nature progress-bar-nature--sm">
+                <div class="progress-bar-fill progress-bar-fill--amber" id="streakNextMilestoneBar"></div>
+              </div>
             </div>
           </div>
 
-          <!-- Milestone Badges Grid -->
-          <h3 style="margin-top:28px; margin-bottom:14px; font-size:1.15rem; color:var(--forest-green);">
-            Nature Productivity Milestones &amp; Badges
-          </h3>
+          <!-- Three Metric Cards -->
+          <div class="grid-3 streak-metrics-grid">
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Best Personal Streak</span>
+              <strong class="display-num summary-mini-value summary-mini-value--brand" id="longestBigNumber">0</strong>
+              <span class="summary-mini-sub">Longest consecutive run</span>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Total Perfect Days</span>
+              <strong class="display-num summary-mini-value" id="totalSuccessfulBigNumber">0</strong>
+              <span class="summary-mini-sub">All-time 100% days</span>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Unlocked Badges</span>
+              <strong class="display-num summary-mini-value summary-mini-value--amber" id="unlockedBadgesCount">0 / 7</strong>
+              <span class="summary-mini-sub">Milestones earned</span>
+            </div>
+          </div>
 
-          <div class="grid-4" id="badgesContainer">
-            <!-- Dynamic Badges injected by JS -->
+          <!-- Milestone Badges Header + Filter Tabs -->
+          <div class="badges-section-header">
+            <h3 class="card-title-clean">Milestones &amp; Badges</h3>
+            <div class="filter-chips-row" role="group" aria-label="Filter badges">
+              <button type="button" class="chip" data-badge-filter="ALL" aria-pressed="true">All</button>
+              <button type="button" class="chip" data-badge-filter="UNLOCKED" aria-pressed="false">Unlocked</button>
+              <button type="button" class="chip" data-badge-filter="LOCKED" aria-pressed="false">Locked</button>
+            </div>
+          </div>
+
+          <div class="badges-grid" id="badgesContainer">
+            <div class="skeleton skeleton-tile"></div>
+            <div class="skeleton skeleton-tile"></div>
+            <div class="skeleton skeleton-tile"></div>
+            <div class="skeleton skeleton-tile"></div>
           </div>
         </div>
       </section>
@@ -492,43 +705,54 @@
       <!-- ========================================================== -->
       <!-- SECTION 8: PRODUCTIVITY REPORTS                            -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-reports">
+      <section class="section-view" id="view-reports" aria-labelledby="reportsHeading">
         <div class="card-forge">
           <div class="card-header-clean">
             <div>
-              <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">Productivity Analytics &amp; Reports</h2>
-              <p style="margin:4px 0 0 0; font-size:0.86rem; color:var(--text-muted);">
-                Evidence-based productivity metrics computed directly from your saved checklist history.
-              </p>
+              <h2 class="section-heading" id="reportsHeading">Productivity Reports</h2>
+              <p class="card-subtitle">Metrics computed directly from your saved checklist history.</p>
             </div>
-            <div style="display:flex; gap:8px;">
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.exportReportCSV()">Export CSV</button>
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.exportReportJSON()">Export JSON</button>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <!-- Chart 1: 14-Day Completion Rate Trend -->
-            <div class="card-forge" style="margin-bottom:0;">
-              <h4 style="font-size:0.96rem; margin-bottom:12px; color:var(--forest-green);">14-Day Completion Trend (%)</h4>
-              <div style="height:250px;">
-                <canvas id="chartDailyTrend"></canvas>
-              </div>
-            </div>
-
-            <!-- Chart 2: Category Breakdown -->
-            <div class="card-forge" style="margin-bottom:0;">
-              <h4 style="font-size:0.96rem; margin-bottom:12px; color:var(--forest-green);">Tasks by Category</h4>
-              <div style="height:250px;">
-                <canvas id="chartCategoryDist"></canvas>
+            <div class="dropdown-wrap">
+              <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" id="btnReportsExportMenu" aria-haspopup="menu" aria-expanded="false">
+                Export &darr;
+              </button>
+              <div class="dropdown-menu is-hidden" id="reportsExportDropdown" role="menu">
+                <button type="button" class="dropdown-item" role="menuitem" onclick="App.exportReportCSV()">Export CSV</button>
+                <button type="button" class="dropdown-item" role="menuitem" onclick="App.exportReportJSON()">Export JSON</button>
               </div>
             </div>
           </div>
 
-          <!-- Productivity Summary Statistics Table -->
-          <div style="margin-top:22px;">
-            <h4 style="font-size:0.98rem; margin-bottom:10px; color:var(--forest-green);">Summary Performance Table</h4>
-            <div id="reportsSummaryTable"></div>
+          <!-- KPI Row -->
+          <div id="reportsSummaryTable" class="reports-kpi-wrap">
+            <div class="skeleton skeleton-tile"></div>
+          </div>
+
+          <!-- Empty State placeholder when no report data -->
+          <div id="reportsEmptyState" class="is-hidden"></div>
+
+          <!-- Two Chart Cards -->
+          <div class="grid-2" id="reportsChartsGrid">
+            <div class="chart-card">
+              <h3 class="chart-card-title">14-Day Completion Trend (%)</h3>
+              <div class="chart-canvas-wrap" id="trendChartWrap">
+                <div class="skeleton skeleton-chart" id="trendChartSkeleton"></div>
+                <canvas id="chartDailyTrend" aria-label="14-day completion trend chart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <h3 class="chart-card-title">Tasks by Category</h3>
+              <div class="chart-canvas-wrap chart-canvas-wrap--doughnut" id="categoryChartWrap">
+                <div class="skeleton skeleton-chart" id="categoryChartSkeleton"></div>
+                <canvas id="chartCategoryDist" aria-label="Tasks by category chart"></canvas>
+                <div class="doughnut-center-total is-hidden" id="doughnutCenterTotal">
+                  <span class="display-num doughnut-total-num" id="doughnutTotalValue">0</span>
+                  <span class="doughnut-total-label">Tasks</span>
+                </div>
+              </div>
+              <div class="chart-custom-legend" id="categoryCustomLegend"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -537,55 +761,79 @@
       <!-- ========================================================== -->
       <!-- SECTION 9: NOTIFICATIONS                                   -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-notifications">
+      <section class="section-view" id="view-notifications" aria-labelledby="notificationsHeading">
         <div class="grid-2">
           <!-- Notification Preferences -->
           <div class="card-forge">
             <div class="card-header-clean">
-              <h3 class="card-title-clean">Reminder &amp; Notification Settings</h3>
+              <h2 class="card-title-clean" id="notificationsHeading">Reminder Preferences</h2>
             </div>
-            <form id="formNotificationSettings">
-              <div style="margin-bottom:16px;">
-                <label class="form-label-nature">Browser Notifications</label>
-                <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--cream-light); border-radius:var(--radius-md);">
-                  <span style="font-size:0.88rem;">Enable Web Push Notifications</span>
+            <form id="formNotificationSettings" class="settings-form-stack">
+              <div class="pref-group">
+                <div class="pref-group-title">Browser Alerts</div>
+                <div class="permission-status-row">
+                  <div class="permission-status-info">
+                    <span class="status-dot status-dot--muted" id="browserNotifDot" aria-hidden="true"></span>
+                    <div>
+                      <div class="switch-title">Web Push Notifications</div>
+                      <span class="input-hint" id="browserNotifStatusText">Permission not requested yet</span>
+                    </div>
+                  </div>
                   <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" id="btnRequestBrowserNotif">
-                    Request Permission
+                    Enable
                   </button>
                 </div>
-                <span class="input-hint" id="browserNotifStatusText">Permission not requested yet</span>
               </div>
 
-              <div style="margin-bottom:14px;">
-                <label class="form-label-nature">Daily Morning Checklist Reminder</label>
-                <div style="display:flex; gap:10px; align-items:center;">
+              <div class="pref-group">
+                <div class="pref-group-title">Reminders</div>
+                <label class="switch-row" for="prefDailyReminderEnabled">
+                  <div class="switch-copy">
+                    <span class="switch-title">Morning Checklist Reminder</span>
+                    <span class="switch-desc">Remind me to review today's plan</span>
+                  </div>
+                  <input type="checkbox" class="switch-input" id="prefDailyReminderEnabled" checked>
+                  <span class="switch" aria-hidden="true"></span>
+                </label>
+                <div class="pref-inline-field">
+                  <label for="prefDailyReminderTime" class="form-label-nature">Reminder Time</label>
                   <input type="time" id="prefDailyReminderTime" class="form-control-nature" value="08:00">
-                  <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; cursor:pointer;">
-                    <input type="checkbox" id="prefDailyReminderEnabled" checked> Enabled
-                  </label>
                 </div>
               </div>
 
-              <div style="margin-bottom:14px;">
-                <label class="form-label-nature">Pending Tasks Evening Reminder</label>
-                <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; cursor:pointer;">
-                  <input type="checkbox" id="prefPendingReminder" checked> Alert me if today's items are incomplete by 20:00
+              <div class="pref-group">
+                <div class="pref-group-title">Alerts</div>
+                <label class="switch-row" for="prefPendingReminder">
+                  <div class="switch-copy">
+                    <span class="switch-title">Evening Pending Reminder</span>
+                    <span class="switch-desc">Alert if today's items are incomplete by 20:00</span>
+                  </div>
+                  <input type="checkbox" class="switch-input" id="prefPendingReminder" checked>
+                  <span class="switch" aria-hidden="true"></span>
+                </label>
+
+                <label class="switch-row" for="prefStreakWarning">
+                  <div class="switch-copy">
+                    <span class="switch-title">Streak Risk Warning</span>
+                    <span class="switch-desc">Alert before midnight if your streak is at risk</span>
+                  </div>
+                  <input type="checkbox" class="switch-input" id="prefStreakWarning" checked>
+                  <span class="switch" aria-hidden="true"></span>
                 </label>
               </div>
 
-              <div style="margin-bottom:14px;">
-                <label class="form-label-nature">Streak Danger Warning</label>
-                <label style="display:flex; align-items:center; gap:6px; font-size:0.85rem; cursor:pointer;">
-                  <input type="checkbox" id="prefStreakWarning" checked> Alert before midnight if active streak is at risk
-                </label>
-              </div>
-
-              <div style="margin-bottom:14px;">
-                <label class="form-label-nature">Quiet Hours (No notifications)</label>
-                <div style="display:flex; gap:8px; align-items:center;">
-                  <input type="time" id="prefQuietStart" class="form-control-nature" value="22:00">
-                  <span style="font-size:0.82rem;">to</span>
-                  <input type="time" id="prefQuietEnd" class="form-control-nature" value="07:00">
+              <div class="pref-group">
+                <div class="pref-group-title">Quiet Hours</div>
+                <div class="quiet-hours-row">
+                  <div class="quiet-hours-field">
+                    <label for="prefQuietStart" class="form-label-nature">From</label>
+                    <input type="time" id="prefQuietStart" class="form-control-nature" value="22:00">
+                  </div>
+                  <span class="quiet-hours-sep">to</span>
+                  <div class="quiet-hours-field">
+                    <label for="prefQuietEnd" class="form-label-nature">Until</label>
+                    <input type="time" id="prefQuietEnd" class="form-control-nature" value="07:00">
+                  </div>
                 </div>
               </div>
 
@@ -598,11 +846,15 @@
           <!-- Notification History Feed -->
           <div class="card-forge">
             <div class="card-header-clean">
-              <h3 class="card-title-clean">Notification Center</h3>
-              <button class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.clearAllNotifications()">Clear All</button>
+              <h2 class="card-title-clean">Notification Center</h2>
+              <div class="card-header-actions">
+                <button type="button" class="btn-forge btn-forge-ghost btn-forge-sm" id="btnMarkAllRead">Mark all read</button>
+                <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.clearAllNotifications()">Clear</button>
+              </div>
             </div>
             <div id="notificationsFeedList" class="checklist-container">
-              <!-- Rendered by JS -->
+              <div class="skeleton skeleton-row"></div>
+              <div class="skeleton skeleton-row"></div>
             </div>
           </div>
         </div>
@@ -612,61 +864,138 @@
       <!-- ========================================================== -->
       <!-- SECTION 10: SETTINGS                                       -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-settings">
-        <div class="card-forge" style="max-width:760px;">
-          <div class="card-header-clean">
-            <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">Application &amp; Timezone Settings</h2>
-          </div>
+      <section class="section-view" id="view-settings" aria-labelledby="settingsHeading">
+        <div class="settings-layout">
+          <nav class="settings-side-nav" aria-label="Settings sections">
+            <a href="#settings-general" class="settings-anchor-link active">General</a>
+            <a href="#settings-appearance" class="settings-anchor-link">Appearance</a>
+            <a href="#settings-data" class="settings-anchor-link">Data &amp; Backup</a>
+            <a href="#settings-danger" class="settings-anchor-link settings-anchor-link--danger">Danger Zone</a>
+          </nav>
 
-          <form id="formGeneralSettings">
-            <div style="margin-bottom:18px;">
-              <label class="form-label-nature">Configured Local Timezone</label>
-              <select id="settingTimezoneSelect" class="form-control-nature">
-                <option value="Asia/Kolkata">Asia/Kolkata (IST - Tamil Nadu / Chennai, UTC+5:30)</option>
-                <option value="UTC">UTC (Universal Coordinated Time)</option>
-                <option value="America/New_York">America/New_York (EST/EDT, UTC-5)</option>
-                <option value="America/Los_Angeles">America/Los_Angeles (PST/PDT, UTC-8)</option>
-                <option value="Europe/London">Europe/London (GMT/BST, UTC+0/+1)</option>
-                <option value="Europe/Berlin">Europe/Berlin (CET/CEST, UTC+1/+2)</option>
-                <option value="Asia/Tokyo">Asia/Tokyo (JST, UTC+9)</option>
-                <option value="Australia/Sydney">Australia/Sydney (AEST/AEDT, UTC+10/+11)</option>
-                <option value="Atlantic/Cape_Verde">Atlantic/Cape_Verde (CVT, UTC-1)</option>
-              </select>
-              <span class="input-hint">Used for automatic date determination and midnight transition calculations.</span>
+          <form id="formGeneralSettings" class="settings-content-stack">
+            <div class="card-forge" id="settings-general">
+              <div class="card-header-clean">
+                <h2 class="section-heading" id="settingsHeading">General &amp; Timezone</h2>
+              </div>
+
+              <div class="form-field">
+                <label for="settingTimezoneSelect" class="form-label-nature">Local Timezone</label>
+                <select id="settingTimezoneSelect" class="form-control-nature">
+                  <optgroup label="Asia &amp; Pacific">
+                    <option value="Asia/Kolkata">Asia/Kolkata (IST, UTC+5:30)</option>
+                    <option value="Asia/Tokyo">Asia/Tokyo (JST, UTC+9)</option>
+                    <option value="Australia/Sydney">Australia/Sydney (AEST/AEDT, UTC+10/+11)</option>
+                  </optgroup>
+                  <optgroup label="Americas">
+                    <option value="America/New_York">America/New_York (EST/EDT, UTC-5/-4)</option>
+                    <option value="America/Los_Angeles">America/Los_Angeles (PST/PDT, UTC-8/-7)</option>
+                  </optgroup>
+                  <optgroup label="Europe &amp; Atlantic">
+                    <option value="Europe/London">Europe/London (GMT/BST, UTC+0/+1)</option>
+                    <option value="Europe/Berlin">Europe/Berlin (CET/CEST, UTC+1/+2)</option>
+                    <option value="Atlantic/Cape_Verde">Atlantic/Cape_Verde (CVT, UTC-1)</option>
+                  </optgroup>
+                  <optgroup label="Standard">
+                    <option value="UTC">UTC (Coordinated Universal Time)</option>
+                  </optgroup>
+                </select>
+                <span class="input-hint" id="timezoneCurrentTimeHint">Used for automatic date transitions at midnight.</span>
+              </div>
             </div>
 
-            <div style="margin-bottom:18px;">
-              <label class="form-label-nature">Visual Theme</label>
-              <select id="settingThemeSelect" class="form-control-nature">
-                <option value="light">Nature Productivity Light (Cream &amp; Forest Green)</option>
-                <option value="dark">Nature Productivity Dark (Deep Canopy)</option>
-              </select>
-            </div>
+            <div class="card-forge" id="settings-appearance">
+              <div class="card-header-clean">
+                <h3 class="card-title-clean">Appearance</h3>
+              </div>
 
-            <div style="margin-bottom:18px;">
-              <label class="form-label-nature">Data Export &amp; Backup</label>
-              <div style="display:flex; gap:10px;">
-                <button type="button" class="btn-forge btn-forge-secondary" onclick="App.exportFullBackup()">
-                  Download Full JSON Backup
+              <div class="theme-cards-grid" role="radiogroup" aria-label="Visual theme">
+                <button type="button" class="theme-card" data-theme-choice="light" role="radio" aria-checked="true">
+                  <span class="theme-preview theme-preview--light" aria-hidden="true">
+                    <span class="theme-preview-bar"></span>
+                    <span class="theme-preview-card"></span>
+                  </span>
+                  <span class="theme-card-label">Light</span>
+                  <span class="theme-card-sub">Warm cream</span>
                 </button>
-                <button type="button" class="btn-forge btn-forge-secondary" onclick="App.exportReportCSV()">
-                  Download CSV Log
+
+                <button type="button" class="theme-card" data-theme-choice="dark" role="radio" aria-checked="false">
+                  <span class="theme-preview theme-preview--dark" aria-hidden="true">
+                    <span class="theme-preview-bar"></span>
+                    <span class="theme-preview-card"></span>
+                  </span>
+                  <span class="theme-card-label">Dark</span>
+                  <span class="theme-card-sub">Deep canopy</span>
+                </button>
+
+                <button type="button" class="theme-card" data-theme-choice="system" role="radio" aria-checked="false">
+                  <span class="theme-preview theme-preview--system" aria-hidden="true">
+                    <span class="theme-preview-bar"></span>
+                    <span class="theme-preview-card"></span>
+                  </span>
+                  <span class="theme-card-label">System</span>
+                  <span class="theme-card-sub">Match device</span>
                 </button>
               </div>
-              <span class="input-hint">Download your entire personal habit history, streaks, and goal data.</span>
+
+              <label for="settingThemeSelect" class="sr-only">Visual Theme</label>
+              <select id="settingThemeSelect" class="form-control-nature sr-only">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="system">System</option>
+              </select>
             </div>
 
-            <div style="margin-bottom:18px;">
-              <label class="form-label-nature" style="color:var(--accent-red);">Reset Account Data</label>
-              <div>
+            <div class="card-forge" id="settings-data">
+              <div class="card-header-clean">
+                <h3 class="card-title-clean">Data Export &amp; Backup</h3>
+              </div>
+
+              <div class="export-rows">
+                <div class="export-row">
+                  <div class="export-row-info">
+                    <div class="export-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                    </div>
+                    <div>
+                      <div class="switch-title">Full JSON Backup</div>
+                      <span class="switch-desc">Habits, goals, streaks, and complete daily history</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.exportFullBackup()">Download JSON</button>
+                </div>
+
+                <div class="export-row">
+                  <div class="export-row-info">
+                    <div class="export-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    </div>
+                    <div>
+                      <div class="switch-title">Spreadsheet CSV Log</div>
+                      <span class="switch-desc">Daily completion scores formatted for Excel or Sheets</span>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" onclick="App.exportReportCSV()">Download CSV</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-forge danger-zone-card" id="settings-danger">
+              <div class="card-header-clean">
+                <h3 class="card-title-clean card-title-clean--danger">Danger Zone</h3>
+              </div>
+              <div class="export-row">
+                <div>
+                  <div class="switch-title">Reset Account Data</div>
+                  <span class="switch-desc">Permanently deletes all checklist entries, habits, goals, badges, and resets your streak to 0.</span>
+                </div>
                 <button type="button" class="btn-forge btn-forge-danger btn-forge-sm" onclick="App.resetAllUserData()">
-                  Delete All Records &amp; Reset Slate
+                  Reset All Data
                 </button>
               </div>
-              <span class="input-hint">Permanently deletes all checklist entries, habits, goals, milestones, and resets streak to 0.</span>
             </div>
 
-            <div style="margin-top:24px; padding-top:16px; border-top:1px solid var(--cream-dark);">
+            <div class="settings-sticky-save">
               <button type="button" class="btn-forge btn-forge-primary" id="btnSaveGeneralSettings">
                 Save Settings
               </button>
@@ -679,64 +1008,103 @@
       <!-- ========================================================== -->
       <!-- SECTION 11: PROFILE                                        -->
       <!-- ========================================================== -->
-      <section class="section-view" id="view-profile">
-        <div class="card-forge" style="max-width:760px;">
+      <section class="section-view" id="view-profile" aria-labelledby="profileHeading">
+        <div class="card-forge profile-card">
           <div class="card-header-clean">
-            <h2 style="margin:0; font-size:1.35rem; color:var(--forest-green);">User Profile &amp; Account Security</h2>
+            <h2 class="section-heading" id="profileHeading">Profile &amp; Privacy</h2>
           </div>
 
-          <div style="display:flex; align-items:center; gap:18px; margin-bottom:24px;">
-            <div class="user-avatar" style="width:64px; height:64px; font-size:1.6rem;" id="profileAvatarLarge">U</div>
+          <div class="profile-hero-row">
+            <div class="profile-avatar-ring" id="profileAvatarLarge" aria-hidden="true">U</div>
             <div>
-              <h3 style="margin:0; font-size:1.25rem; color:var(--forest-green);" id="profileFullNameLabel">User Profile</h3>
-              <p style="margin:2px 0 0 0; color:var(--text-muted); font-size:0.88rem;" id="profileEmailLabel"></p>
-              <span class="item-category-tag" id="profileTimezoneLabel">Asia/Kolkata</span>
+              <h3 class="profile-name" id="profileFullNameLabel">User Profile</h3>
+              <p class="profile-email" id="profileEmailLabel"></p>
+              <div class="profile-meta-chips">
+                <span class="tag tag--career" id="profileTimezoneLabel">Asia/Kolkata</span>
+                <span class="status-badge status-badge--success" id="profileAuthStatus">Signed in</span>
+              </div>
             </div>
           </div>
 
-          <div style="margin-bottom:20px;">
-            <h4 style="font-size:0.95rem; color:var(--forest-green); margin-bottom:10px;">Account Security</h4>
-            <div style="padding:14px; background:var(--cream-light); border-radius:var(--radius-md); border:1px solid var(--cream-dark); font-size:0.86rem;">
-              <div>Authentication Status: <strong style="color:var(--forest-green);" id="profileAuthStatus">Authenticated (Spring Security)</strong></div>
-              <div style="margin-top:4px;">Account Isolation: <strong>Strict per-user boundary enforced</strong></div>
-              <div style="margin-top:4px;">Date Protection: <strong>Server-enforced upcoming days lock</strong></div>
+          <div class="grid-3 goals-summary-strip">
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Active Habits</span>
+              <strong class="summary-mini-value tabular-num" id="profileStatHabits">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Current Streak</span>
+              <strong class="summary-mini-value summary-mini-value--amber tabular-num" id="profileStatStreak">0</strong>
+            </div>
+            <div class="summary-mini-card">
+              <span class="summary-mini-label">Perfect Days</span>
+              <strong class="summary-mini-value summary-mini-value--brand tabular-num" id="profileStatPerfectDays">0</strong>
             </div>
           </div>
 
-          <div style="display:flex; gap:12px;">
-            <button class="btn-forge btn-forge-outline" onclick="App.showModal('modalAuth')">Switch Account / Re-login</button>
-            <button class="btn-forge btn-forge-danger" id="btnLogout">Sign Out</button>
+          <div class="profile-privacy-box">
+            <div class="privacy-row">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+              <span><strong>Your data is private</strong> — your habits, goals, and records are visible only to your account.</span>
+            </div>
+            <div class="privacy-row">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              <span><strong>Future days stay locked until they arrive</strong> — preserving an honest record of consistency.</span>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button type="button" class="btn-forge btn-forge-outline" onclick="App.showModal('modalAuth')">Switch Account</button>
+            <button type="button" class="btn-forge btn-forge-danger" id="btnLogout">Sign Out</button>
           </div>
         </div>
       </section>
 
-    </div>
-  </main>
+    </main>
+  </div>
 </div>
 
 <!-- Mobile Bottom Navigation Bar -->
-<nav class="mobile-bottom-nav">
-  <button class="mobile-nav-btn active" data-section="dashboard">
-    <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+<nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+  <button type="button" class="mobile-nav-btn active" data-section="dashboard" aria-current="page">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
     <span>Home</span>
   </button>
-  <button class="mobile-nav-btn" data-section="today">
-    <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+  <button type="button" class="mobile-nav-btn" data-section="today">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
     <span>Today</span>
   </button>
-  <button class="mobile-nav-btn" data-section="calendar">
-    <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+  <button type="button" class="mobile-nav-btn" data-section="calendar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
     <span>Calendar</span>
   </button>
-  <button class="mobile-nav-btn" data-section="streaks">
-    <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+  <button type="button" class="mobile-nav-btn" data-section="streaks">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>
     <span>Streaks</span>
   </button>
-  <button class="mobile-nav-btn" data-section="reports">
-    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10z"/></svg>
-    <span>Reports</span>
+  <button type="button" class="mobile-nav-btn" id="btnMobileMore" aria-haspopup="dialog" aria-controls="mobileMoreSheet">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+    <span>More</span>
   </button>
 </nav>
+
+<!-- Mobile More Sheet -->
+<div class="modal-overlay modal-overlay--sheet" id="mobileMoreSheet" role="dialog" aria-modal="true" aria-labelledby="mobileMoreTitle" aria-hidden="true">
+  <div class="modal-box modal-box--sheet">
+    <div class="modal-header">
+      <h3 class="modal-title" id="mobileMoreTitle">More Sections</h3>
+      <button type="button" class="modal-close" aria-label="Close menu" onclick="App.hideModal('mobileMoreSheet')">&times;</button>
+    </div>
+    <div class="modal-body more-sheet-grid">
+      <button type="button" class="more-sheet-item" data-more-section="habits">My Habits</button>
+      <button type="button" class="more-sheet-item" data-more-section="goals">Goals</button>
+      <button type="button" class="more-sheet-item" data-more-section="history">History</button>
+      <button type="button" class="more-sheet-item" data-more-section="reports">Reports</button>
+      <button type="button" class="more-sheet-item" data-more-section="notifications">Notifications</button>
+      <button type="button" class="more-sheet-item" data-more-section="settings">Settings</button>
+      <button type="button" class="more-sheet-item" data-more-section="profile">Profile</button>
+    </div>
+  </div>
+</div>
 
 
 <!-- ============================================================== -->
@@ -744,254 +1112,343 @@
 <!-- ============================================================== -->
 
 <!-- 1. BATCH ADD ACTIVITIES MODAL -->
-<div class="modal-overlay" id="modalBatchAdd">
+<div class="modal-overlay" id="modalBatchAdd" role="dialog" aria-modal="true" aria-labelledby="batchAddModalTitle" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="modal-title">Batch Add Activities</h3>
-      <button class="modal-close" onclick="App.hideModal('modalBatchAdd')">&times;</button>
+      <h3 class="modal-title" id="batchAddModalTitle">Batch Add Activities</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalBatchAdd')">&times;</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:12px;">
-        Enter multiple habits separated by commas. Each will automatically become an individual checklist item.
+      <p class="modal-lead">
+        Enter multiple activities separated by commas. Each will become a separate checklist item for today.
       </p>
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Activities (Comma-separated)</label>
+      <div class="form-field">
+        <label for="batchInputTextarea" class="form-label-nature">Activities (Comma-separated)</label>
         <textarea id="batchInputTextarea" class="form-control-nature" rows="3" placeholder="Workout, Study, Practice, Coding, Meditation"></textarea>
       </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Assign Default Category</label>
+      <div class="form-field">
+        <label for="batchCategorySelect" class="form-label-nature">Default Category</label>
         <select id="batchCategorySelect" class="form-control-nature">
           <option value="GENERAL">General</option>
-          <option value="HEALTH">Health &amp; Fitness</option>
-          <option value="LEARNING">Learning &amp; Study</option>
-          <option value="CAREER">Work &amp; Coding</option>
-          <option value="MINDFULNESS">Mindfulness &amp; Wellness</option>
+          <option value="HEALTH">Health</option>
+          <option value="LEARNING">Learning</option>
+          <option value="CAREER">Career</option>
+          <option value="MINDFULNESS">Mindfulness</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-forge btn-forge-secondary" onclick="App.hideModal('modalBatchAdd')">Cancel</button>
-      <button class="btn-forge btn-forge-primary" id="btnSubmitBatchAdd">Generate Items</button>
+      <button type="button" class="btn-forge btn-forge-ghost" onclick="App.hideModal('modalBatchAdd')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-primary" id="btnSubmitBatchAdd">Generate Items</button>
     </div>
   </div>
 </div>
 
 <!-- 2. SINGLE ITEM ADD MODAL -->
-<div class="modal-overlay" id="modalSingleAdd">
+<div class="modal-overlay" id="modalSingleAdd" role="dialog" aria-modal="true" aria-labelledby="singleAddModalTitle" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="modal-title">Add Checklist Item</h3>
-      <button class="modal-close" onclick="App.hideModal('modalSingleAdd')">&times;</button>
+      <h3 class="modal-title" id="singleAddModalTitle">Add Checklist Task</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalSingleAdd')">&times;</button>
     </div>
     <div class="modal-body">
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Activity Name</label>
+      <div class="form-field">
+        <label for="singleItemTitle" class="form-label-nature">Task Name</label>
         <input type="text" id="singleItemTitle" class="form-control-nature" placeholder="e.g. Morning 5km Run">
       </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Category</label>
+      <div class="form-field">
+        <label for="singleItemCategory" class="form-label-nature">Category</label>
         <select id="singleItemCategory" class="form-control-nature">
-          <option value="HEALTH">Health &amp; Fitness</option>
-          <option value="LEARNING">Learning &amp; Study</option>
-          <option value="CAREER">Work &amp; Coding</option>
-          <option value="MINDFULNESS">Mindfulness &amp; Wellness</option>
+          <option value="HEALTH">Health</option>
+          <option value="LEARNING">Learning</option>
+          <option value="CAREER">Career</option>
+          <option value="MINDFULNESS">Mindfulness</option>
           <option value="GENERAL">General</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-forge btn-forge-secondary" onclick="App.hideModal('modalSingleAdd')">Cancel</button>
-      <button class="btn-forge btn-forge-primary" id="btnSubmitSingleAdd">Add Item</button>
+      <button type="button" class="btn-forge btn-forge-ghost" onclick="App.hideModal('modalSingleAdd')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-primary" id="btnSubmitSingleAdd">Add Task</button>
     </div>
   </div>
 </div>
 
 <!-- 3. EDIT ITEM MODAL -->
-<div class="modal-overlay" id="modalEditItem">
+<div class="modal-overlay" id="modalEditItem" role="dialog" aria-modal="true" aria-labelledby="editItemModalTitle" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="modal-title">Edit Checklist Activity</h3>
-      <button class="modal-close" onclick="App.hideModal('modalEditItem')">&times;</button>
+      <h3 class="modal-title" id="editItemModalTitle">Edit Checklist Task</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalEditItem')">&times;</button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="editItemId">
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Activity Name</label>
+      <div class="form-field">
+        <label for="editItemTitle" class="form-label-nature">Task Name</label>
         <input type="text" id="editItemTitle" class="form-control-nature">
       </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Category</label>
+      <div class="form-field">
+        <label for="editItemCategory" class="form-label-nature">Category</label>
         <select id="editItemCategory" class="form-control-nature">
-          <option value="HEALTH">Health &amp; Fitness</option>
-          <option value="LEARNING">Learning &amp; Study</option>
-          <option value="CAREER">Work &amp; Coding</option>
-          <option value="MINDFULNESS">Mindfulness &amp; Wellness</option>
+          <option value="HEALTH">Health</option>
+          <option value="LEARNING">Learning</option>
+          <option value="CAREER">Career</option>
+          <option value="MINDFULNESS">Mindfulness</option>
           <option value="GENERAL">General</option>
         </select>
       </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-forge btn-forge-secondary" onclick="App.hideModal('modalEditItem')">Cancel</button>
-      <button class="btn-forge btn-forge-primary" id="btnSubmitEditItem">Save Changes</button>
+      <button type="button" class="btn-forge btn-forge-ghost" onclick="App.hideModal('modalEditItem')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-primary" id="btnSubmitEditItem">Save Changes</button>
     </div>
   </div>
 </div>
 
-<!-- 4. CONFIRM DELETE MODAL -->
-<div class="modal-overlay" id="modalConfirmDelete">
+<!-- 4. SHARED CONFIRM DELETE / RESET MODAL -->
+<div class="modal-overlay" id="modalConfirmDelete" role="dialog" aria-modal="true" aria-labelledby="confirmDeleteModalTitle" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="modal-title" style="color:var(--accent-red);">Confirm Deletion</h3>
-      <button class="modal-close" onclick="App.hideModal('modalConfirmDelete')">&times;</button>
+      <h3 class="modal-title modal-title--danger" id="confirmDeleteModalTitle">Confirm Deletion</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalConfirmDelete')">&times;</button>
     </div>
     <div class="modal-body">
-      <p style="font-size:0.92rem;" id="confirmDeleteMessage">Are you sure you want to remove this checklist activity?</p>
+      <p class="modal-lead" id="confirmDeleteMessage">Are you sure you want to remove this checklist activity?</p>
       <input type="hidden" id="deleteTargetItemId">
+      <div class="form-field is-hidden" id="confirmDeleteTypedWrap">
+        <label for="confirmDeleteTypedInput" class="form-label-nature">Type <strong>DELETE</strong> to confirm</label>
+        <input type="text" id="confirmDeleteTypedInput" class="form-control-nature" autocomplete="off" placeholder="DELETE">
+      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-forge btn-forge-secondary" onclick="App.hideModal('modalConfirmDelete')">Keep Item</button>
-      <button class="btn-forge btn-forge-danger" id="btnSubmitConfirmDelete">Yes, Remove</button>
+      <button type="button" class="btn-forge btn-forge-ghost" id="btnCancelConfirmDelete" onclick="App.hideModal('modalConfirmDelete')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-danger" id="btnSubmitConfirmDelete">Yes, Remove</button>
     </div>
   </div>
 </div>
 
-<!-- 5. ADD HABIT MODAL (RECURRING SCHEDULE & DATE RANGE) -->
-<div class="modal-overlay" id="modalAddHabit">
-  <div class="modal-box">
+<!-- 5. ADD HABIT MODAL -->
+<div class="modal-overlay" id="modalAddHabit" role="dialog" aria-modal="true" aria-labelledby="addHabitModalTitle" aria-hidden="true">
+  <div class="modal-box modal-box--wide">
     <div class="modal-header">
-      <h3 class="modal-title">Create Recurring Habit</h3>
-      <button class="modal-close" onclick="App.hideModal('modalAddHabit')">&times;</button>
+      <h3 class="modal-title" id="addHabitModalTitle">Create Recurring Habit</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalAddHabit')">&times;</button>
     </div>
     <div class="modal-body">
-      <!-- Dynamic Activities with Individual Category Selection -->
-      <div style="margin-bottom:14px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <label class="form-label-nature" style="margin-bottom:0;">Activities &amp; Categories</label>
-          <span style="font-size:0.75rem; color:var(--text-muted);">Assign category for each activity</span>
-        </div>
-
-        <div id="habitRowsContainer" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; padding-right:2px;">
-          <!-- Default Row 1 -->
-          <div class="habit-activity-row" style="display:flex; gap:8px; align-items:center;">
-            <input type="text" class="form-control-nature habit-row-title" placeholder="e.g. Java" style="flex:1.4;">
-            <select class="form-control-nature habit-row-category" style="flex:1;">
-              <option value="CAREER">Work &amp; Coding</option>
-              <option value="LEARNING">Learning &amp; Study</option>
-              <option value="HEALTH">Health &amp; Fitness</option>
-              <option value="MINDFULNESS">Mindfulness &amp; Wellness</option>
-              <option value="GENERAL">General</option>
-            </select>
-            <button type="button" class="btn-item-action habit-row-remove" title="Remove" style="opacity:0.3; cursor:default; min-width:28px;" disabled>&times;</button>
+      <div class="habit-modal-section">
+        <div class="habit-step-header">
+          <span class="habit-step-num">1</span>
+          <div>
+            <div class="form-label-nature habit-step-title">Activities &amp; Categories</div>
+            <span class="input-hint">Add one or more activities sharing this schedule</span>
           </div>
         </div>
 
-        <button type="button" class="btn-forge btn-forge-secondary btn-forge-sm" id="btnAddHabitRow" style="margin-top:10px; width:100%; border-style:dashed;">
+        <div id="habitRowsContainer" class="habit-rows-list">
+          <div class="habit-activity-row">
+            <span class="habit-drag-handle" aria-hidden="true">⋮⋮</span>
+            <input type="text" class="form-control-nature habit-row-title" placeholder="e.g. Morning Walk" aria-label="Habit activity title">
+            <select class="form-control-nature habit-row-category" aria-label="Habit category">
+              <option value="CAREER">Career</option>
+              <option value="LEARNING">Learning</option>
+              <option value="HEALTH">Health</option>
+              <option value="MINDFULNESS">Mindfulness</option>
+              <option value="GENERAL">General</option>
+            </select>
+            <button type="button" class="btn-item-action habit-row-remove" aria-label="Remove activity row" title="Remove" disabled>&times;</button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-forge btn-forge-outline btn-forge-sm btn-dashed-full" id="btnAddHabitRow">
           + Add Another Activity
         </button>
       </div>
-      <div style="margin-bottom:14px;">
-        <label class="form-label-nature">Recurrence Frequency</label>
-        <select id="habitFrequencySelect" class="form-control-nature">
-          <option value="DAILY">Every Day (Daily)</option>
-          <option value="WEEKDAYS">Weekdays Only (Mon - Fri)</option>
-          <option value="CUSTOM_DAYS">Custom Selected Days</option>
-        </select>
-      </div>
 
-      <!-- Custom Days selector (hidden by default) -->
-      <div id="habitCustomDaysGroup" style="display:none; margin-bottom:14px; background:var(--cream-light); padding:10px; border-radius:var(--radius-md);">
-        <label class="form-label-nature">Select Days</label>
-        <div style="display:flex; justify-content:space-between; font-size:0.8rem;">
-          <label><input type="checkbox" name="customDay" value="1"> Mon</label>
-          <label><input type="checkbox" name="customDay" value="2"> Tue</label>
-          <label><input type="checkbox" name="customDay" value="3"> Wed</label>
-          <label><input type="checkbox" name="customDay" value="4"> Thu</label>
-          <label><input type="checkbox" name="customDay" value="5"> Fri</label>
-          <label><input type="checkbox" name="customDay" value="6"> Sat</label>
-          <label><input type="checkbox" name="customDay" value="7"> Sun</label>
+      <div class="habit-modal-section">
+        <div class="habit-step-header">
+          <span class="habit-step-num">2</span>
+          <div>
+            <div class="form-label-nature habit-step-title">Schedule &amp; Dates</div>
+          </div>
         </div>
-      </div>
 
-      <div class="grid-2" style="margin-bottom:14px;">
-        <div>
-          <label class="form-label-nature">Start Date</label>
-          <input type="date" id="habitStartDateInput" class="form-control-nature">
+        <div class="form-field">
+          <label for="habitFrequencySelect" class="form-label-nature">Frequency</label>
+          <div class="segmented-control" role="group" aria-label="Habit frequency">
+            <button type="button" class="segmented-btn active" data-freq-opt="DAILY" aria-pressed="true">Daily</button>
+            <button type="button" class="segmented-btn" data-freq-opt="WEEKDAYS" aria-pressed="false">Weekdays</button>
+            <button type="button" class="segmented-btn" data-freq-opt="CUSTOM_DAYS" aria-pressed="false">Custom</button>
+          </div>
+          <select id="habitFrequencySelect" class="form-control-nature sr-only">
+            <option value="DAILY">Every Day (Daily)</option>
+            <option value="WEEKDAYS">Weekdays Only (Mon - Fri)</option>
+            <option value="CUSTOM_DAYS">Custom Selected Days</option>
+          </select>
         </div>
-        <div>
-          <label class="form-label-nature">End Date (Optional)</label>
-          <input type="date" id="habitEndDateInput" class="form-control-nature">
+
+        <div id="habitCustomDaysGroup" class="custom-days-panel is-hidden">
+          <span class="form-label-nature">Select Days</span>
+          <div class="day-pills-grid">
+            <label class="day-pill"><input type="checkbox" name="customDay" value="1"><span>Mon</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="2"><span>Tue</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="3"><span>Wed</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="4"><span>Thu</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="5"><span>Fri</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="6"><span>Sat</span></label>
+            <label class="day-pill"><input type="checkbox" name="customDay" value="7"><span>Sun</span></label>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-field">
+            <label for="habitStartDateInput" class="form-label-nature">Start Date</label>
+            <input type="date" id="habitStartDateInput" class="form-control-nature">
+          </div>
+          <div class="form-field">
+            <label for="habitEndDateInput" class="form-label-nature">End Date (Optional)</label>
+            <input type="date" id="habitEndDateInput" class="form-control-nature">
+          </div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-forge btn-forge-secondary" onclick="App.hideModal('modalAddHabit')">Cancel</button>
-      <button class="btn-forge btn-forge-primary" id="btnSubmitAddHabit">Save Habit Schedule</button>
+    <div class="modal-footer modal-footer--sticky">
+      <button type="button" class="btn-forge btn-forge-ghost" onclick="App.hideModal('modalAddHabit')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-primary" id="btnSubmitAddHabit">Save Habit Schedule</button>
     </div>
   </div>
 </div>
 
-<!-- 6. AUTH MODAL (LOGIN & REGISTRATION) -->
-<div class="modal-overlay" id="modalAuth">
+<!-- 6. ADD GOAL MODAL -->
+<div class="modal-overlay" id="modalAddGoal" role="dialog" aria-modal="true" aria-labelledby="addGoalModalTitle" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-header">
-      <h3 class="modal-title" id="authModalTitle">Sign In to KEIZOKU</h3>
-      <button class="modal-close" onclick="App.hideModal('modalAuth')">&times;</button>
+      <h3 class="modal-title" id="addGoalModalTitle">Create Discipline Goal</h3>
+      <button type="button" class="modal-close" aria-label="Close dialog" onclick="App.hideModal('modalAddGoal')">&times;</button>
     </div>
     <div class="modal-body">
-      <div style="display:flex; border-bottom:1px solid var(--cream-dark); margin-bottom:16px;">
-        <button type="button" class="btn-forge btn-forge-secondary active" id="btnTabLogin" style="flex:1; border-radius:0; border:none; border-bottom:2px solid var(--forest-green);">
-          Sign In
-        </button>
-        <button type="button" class="btn-forge btn-forge-secondary" id="btnTabRegister" style="flex:1; border-radius:0; border:none;">
-          Create Account
-        </button>
+      <div class="form-field">
+        <label for="goalTitleInput" class="form-label-nature">Goal Title</label>
+        <input type="text" id="goalTitleInput" class="form-control-nature" placeholder="e.g. 30 Days of Consistent Deep Work">
       </div>
+      <div class="form-field">
+        <label for="goalDurationPreset" class="form-label-nature">Target Duration</label>
+        <select id="goalDurationPreset" class="form-control-nature">
+          <option value="7">7 Days (1 Week Starter)</option>
+          <option value="14">14 Days (2 Week Builder)</option>
+          <option value="28">28 Days (Habit Formation)</option>
+          <option value="30" selected>30 Days (Monthly Challenge)</option>
+          <option value="custom">Custom Duration</option>
+        </select>
+      </div>
+      <div class="form-field is-hidden" id="goalCustomDurationGroup">
+        <label for="goalCustomDaysInput" class="form-label-nature">Custom Target Days</label>
+        <input type="number" id="goalCustomDaysInput" class="form-control-nature" min="1" max="365" placeholder="e.g. 60">
+      </div>
+      <div class="form-field">
+        <label for="goalStartDateInput" class="form-label-nature">Start Date</label>
+        <input type="date" id="goalStartDateInput" class="form-control-nature">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-forge btn-forge-ghost" onclick="App.hideModal('modalAddGoal')">Cancel</button>
+      <button type="button" class="btn-forge btn-forge-primary" id="btnSubmitAddGoal">Create Goal</button>
+    </div>
+  </div>
+</div>
 
-      <!-- Login Form -->
-      <form id="formLogin">
-        <div style="margin-bottom:14px;">
-          <label class="form-label-nature">Username</label>
-          <input type="text" id="loginUsername" class="form-control-nature" placeholder="Enter your username" required>
+<!-- 7. AUTH MODAL / FIRST-RUN SPLIT SCREEN -->
+<div class="modal-overlay" id="modalAuth" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" aria-hidden="true">
+  <div class="auth-split-shell">
+    <aside class="auth-brand-panel" aria-hidden="true">
+      <div class="auth-brand-inner">
+        <div class="brand-icon auth-brand-logo">
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="66 14" opacity="0.95"/>
+            <path d="M16 5.5C16 5.5 23 11.5 23 17.5C23 21.366 19.866 24.5 16 24.5C12.134 24.5 9 21.366 9 17.5C9 11.5 16 5.5 16 5.5Z" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M16 9.5V24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
-        <div style="margin-bottom:14px;">
-          <label class="form-label-nature">Password</label>
-          <input type="password" id="loginPassword" class="form-control-nature" placeholder="Enter your password" required>
+        <span class="auth-brand-kicker">KEIZOKU</span>
+        <h2 class="auth-brand-heading">Quiet consistency compounds into character.</h2>
+        <p class="auth-brand-desc">Track daily rituals, build unbroken streaks, and review your progress in a calm, distraction-free journal.</p>
+        <div class="auth-brand-highlights">
+          <div class="auth-highlight-item">✓ Habit schedules tailored to your days</div>
+          <div class="auth-highlight-item">✓ Unbroken streak engine &amp; milestones</div>
+          <div class="auth-highlight-item">✓ Private progress archive &amp; reports</div>
         </div>
-        <button type="submit" class="btn-forge btn-forge-primary" style="width:100%; margin-top:8px;">
-          Sign In
-        </button>
-      </form>
+      </div>
+    </aside>
 
-      <!-- Register Form -->
-      <form id="formRegister" style="display:none;">
-        <div style="margin-bottom:12px;">
-          <label class="form-label-nature">Full Name</label>
-          <input type="text" id="regFullName" class="form-control-nature" placeholder="Your Name" required>
+    <div class="modal-box auth-modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="authModalTitle">Sign In to KEIZOKU</h3>
+        <button type="button" class="modal-close" id="btnCloseAuthModal" aria-label="Close sign in dialog" onclick="App.hideModal('modalAuth')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="segmented-control auth-tabs" role="tablist" aria-label="Authentication mode">
+          <button type="button" class="segmented-btn active" id="btnTabLogin" role="tab" aria-selected="true">Sign In</button>
+          <button type="button" class="segmented-btn" id="btnTabRegister" role="tab" aria-selected="false">Create Account</button>
         </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label-nature">Username</label>
-          <input type="text" id="regUsername" class="form-control-nature" placeholder="username" required>
-        </div>
-        <div style="margin-bottom:12px;">
-          <label class="form-label-nature">Email</label>
-          <input type="email" id="regEmail" class="form-control-nature" placeholder="name@example.com" required>
-        </div>
-        <div style="margin-bottom:14px;">
-          <label class="form-label-nature">Password</label>
-          <input type="password" id="regPassword" class="form-control-nature" placeholder="At least 6 characters" required>
-        </div>
-        <button type="submit" class="btn-forge btn-forge-primary" style="width:100%;">
-          Register Account
-        </button>
-      </form>
+
+        <div class="alert-banner is-hidden" id="authErrorBanner" role="alert"></div>
+
+        <!-- Login Form -->
+        <form id="formLogin" novalidate>
+          <div class="form-field">
+            <label for="loginUsername" class="form-label-nature">Username</label>
+            <input type="text" id="loginUsername" class="form-control-nature" autocomplete="username" placeholder="Enter your username" aria-describedby="loginUsernameError" required>
+            <span class="field-error" id="loginUsernameError"></span>
+          </div>
+          <div class="form-field">
+            <label for="loginPassword" class="form-label-nature">Password</label>
+            <div class="password-field-wrap">
+              <input type="password" id="loginPassword" class="form-control-nature" autocomplete="current-password" placeholder="Enter your password" aria-describedby="loginPasswordError" required>
+              <button type="button" class="btn-pw-toggle" data-pw-target="loginPassword" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+            <span class="field-error" id="loginPasswordError"></span>
+          </div>
+          <button type="submit" class="btn-forge btn-forge-primary btn-forge-lg btn-full" id="btnSubmitLogin">
+            Sign In
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="formRegister" class="is-hidden" novalidate>
+          <div class="form-field">
+            <label for="regFullName" class="form-label-nature">Full Name</label>
+            <input type="text" id="regFullName" class="form-control-nature" autocomplete="name" placeholder="Your Name" aria-describedby="regFullNameError" required>
+            <span class="field-error" id="regFullNameError"></span>
+          </div>
+          <div class="form-field">
+            <label for="regUsername" class="form-label-nature">Username</label>
+            <input type="text" id="regUsername" class="form-control-nature" autocomplete="username" placeholder="username" aria-describedby="regUsernameError" required>
+            <span class="field-error" id="regUsernameError"></span>
+          </div>
+          <div class="form-field">
+            <label for="regEmail" class="form-label-nature">Email</label>
+            <input type="email" id="regEmail" class="form-control-nature" autocomplete="email" placeholder="name@example.com" aria-describedby="regEmailError" required>
+            <span class="field-error" id="regEmailError"></span>
+          </div>
+          <div class="form-field">
+            <label for="regPassword" class="form-label-nature">Password</label>
+            <div class="password-field-wrap">
+              <input type="password" id="regPassword" class="form-control-nature" autocomplete="new-password" placeholder="At least 6 characters" aria-describedby="regPasswordError" required>
+              <button type="button" class="btn-pw-toggle" data-pw-target="regPassword" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+            <span class="field-error" id="regPasswordError"></span>
+          </div>
+          <button type="submit" class="btn-forge btn-forge-primary btn-forge-lg btn-full" id="btnSubmitRegister">
+            Create Account
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Toast Container -->
-<div class="toast-container" id="toastContainer"></div>
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="false"></div>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=2"></script>
 </body>
 </html>
-
